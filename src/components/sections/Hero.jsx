@@ -2,34 +2,28 @@ import { Button } from '@/components/ui/button'
 import { useCountdown } from '@/hooks/useCountdown'
 import { EVENT, STATS } from '@/lib/constants'
 
-function CountdownBlock({ value, label }) {
+const D = '#f0e8d8'           /* warm cream text  */
+const M = 'rgba(240,232,216,.52)' /* muted           */
+const A = '#c47818'           /* amber accent     */
+const BG = '#1a1208'          /* warm dark bg     */
+
+function Num({ value, label }) {
   return (
-    <div className="flex flex-col items-center min-w-[52px]">
-      <span
-        className="font-title text-4xl leading-none"
-        style={{ color: '#c47818' }}
-      >
+    <div className="flex flex-col items-center min-w-[48px]">
+      <span className="font-title text-[2.6rem] leading-none" style={{ color: A }}>
         {String(value).padStart(2, '0')}
       </span>
-      <small className="text-[10px] uppercase tracking-widest mt-1" style={{ color: 'rgba(240,232,216,0.55)' }}>
+      <small className="text-[9px] tracking-[.3em] uppercase mt-0.5" style={{ color: M }}>
         {label}
       </small>
     </div>
   )
 }
 
-function Sep() {
-  return (
-    <span className="font-title text-2xl pb-1 animate-blink" style={{ color: 'rgba(196,120,24,0.5)' }}>
-      :
-    </span>
-  )
-}
-
 export default function Hero() {
   const { days, hours, mins, secs } = useCountdown(EVENT.date)
 
-  const scrollTo = (href) => {
+  const go = href => {
     const el = document.querySelector(href)
     if (el) el.scrollIntoView({ behavior: 'smooth', block: 'start' })
   }
@@ -37,156 +31,137 @@ export default function Hero() {
   return (
     <section
       id="hero"
-      className="relative min-h-screen flex flex-col items-center justify-center overflow-hidden grain"
-      style={{ background: 'linear-gradient(175deg, #1a1208 0%, #16100a 55%, #1c1510 100%)' }}
+      className="relative min-h-screen flex flex-col items-center justify-center"
+      style={{ background: BG }}
     >
-      {/* Faint warm vignette — depth without glow */}
+      {/* Subtle warm vignette — no glow, just depth */}
       <div
         className="absolute inset-0 pointer-events-none"
-        style={{ background: 'radial-gradient(ellipse at center, transparent 40%, rgba(10,6,2,0.65) 100%)' }}
+        style={{ background: 'radial-gradient(ellipse 80% 70% at 50% 50%, transparent 50%, rgba(10,7,2,.5) 100%)' }}
       />
 
       {/* Content */}
-      <div className="relative z-10 text-center px-6 pt-28 pb-52 max-w-4xl mx-auto">
+      <div className="relative z-10 text-center px-6 pt-24 pb-48 max-w-5xl mx-auto w-full">
 
-        {/* Edition label */}
-        <div className="flex items-center justify-center gap-4 mb-8 animate-fade-up">
-          <div className="h-px w-16" style={{ background: 'rgba(196,120,24,0.5)' }} />
-          <p
-            className="text-[10px] font-bold tracking-[.35em] uppercase whitespace-nowrap"
-            style={{ color: '#c47818' }}
-          >
-            Edición {EVENT.year} · Gravel Race
-          </p>
-          <div className="h-px w-16" style={{ background: 'rgba(196,120,24,0.5)' }} />
-        </div>
+        {/* Kicker */}
+        <p
+          className="text-[10px] font-bold tracking-[.5em] uppercase mb-6 animate-fade-up"
+          style={{ color: A }}
+        >
+          Edición {EVENT.year} · Gravel Race
+        </p>
 
         {/* Main title */}
         <h1
-          className="font-title leading-none mb-6 animate-fade-up"
+          className="font-title leading-[0.92] animate-fade-up"
           style={{
-            fontSize: 'clamp(4.5rem, 14vw, 11rem)',
-            color: '#f0e8d8',
-            animationDelay: '80ms',
-            letterSpacing: '0.02em',
+            fontSize: 'clamp(5rem, 18vw, 13rem)',
+            color: D,
+            letterSpacing: '0.015em',
+            animationDelay: '60ms',
           }}
         >
           CAÍDOS<br />
-          <span style={{ color: '#c47818' }}>DEL ZARZO</span>
+          <span style={{ color: A }}>DEL ZARZO</span>
         </h1>
 
-        {/* Tagline */}
-        <p
-          className="mb-10 animate-fade-up"
-          style={{
-            fontSize: 'clamp(1rem, 2.2vw, 1.25rem)',
-            color: 'rgba(240,232,216,0.6)',
-            animationDelay: '160ms',
-          }}
-        >
-          Polvo, adrenalina y gloria entre montañas.
-        </p>
+        {/* Rule */}
+        <div className="my-8 animate-fade-up" style={{ animationDelay: '120ms' }}>
+          <div className="h-px mx-auto max-w-xs" style={{ background: `rgba(196,120,24,.35)` }} />
+        </div>
 
-        {/* Meta info — no boxes, just text */}
+        {/* Event meta — clean row, no boxes */}
         <div
-          className="flex flex-wrap items-start justify-center gap-x-8 gap-y-4 mb-12 animate-fade-up"
-          style={{ animationDelay: '240ms' }}
+          className="flex flex-wrap items-center justify-center gap-x-8 gap-y-3 mb-10 animate-fade-up"
+          style={{ animationDelay: '180ms' }}
         >
-          {[
-            { label: EVENT.dateLabel,    sub: 'Fecha del evento'   },
-            { label: 'Punto de Partida', sub: EVENT.location        },
-            { label: '2 Categorías',     sub: 'Gravel Race & Paseo' },
-          ].map((item, i) => (
-            <div key={i} className="text-center">
-              <strong className="block text-sm font-bold" style={{ color: '#f0e8d8' }}>
-                {item.label}
-              </strong>
-              <small className="block text-[11px]" style={{ color: 'rgba(240,232,216,0.45)' }}>
-                {item.sub}
-              </small>
-            </div>
-          ))}
+          <span className="text-sm" style={{ color: D }}>
+            📅 <strong>{EVENT.dateLabel}</strong>
+          </span>
+          <span style={{ color: M }}>·</span>
+          <span className="text-sm" style={{ color: D }}>
+            📍 {EVENT.location}
+          </span>
+          <span style={{ color: M }}>·</span>
+          <span className="text-sm" style={{ color: D }}>
+            🚵 2 Categorías
+          </span>
         </div>
 
         {/* CTAs */}
         <div
           className="flex flex-wrap gap-4 justify-center animate-fade-up"
-          style={{ animationDelay: '320ms' }}
+          style={{ animationDelay: '240ms' }}
         >
-          <Button size="lg" onClick={() => scrollTo('#inscripcion')}>
+          <button
+            onClick={() => go('#inscripcion')}
+            className="px-9 py-3 font-bold text-sm text-white tracking-wide uppercase transition-colors"
+            style={{ background: A }}
+            onMouseEnter={e => e.currentTarget.style.background = '#8f5510'}
+            onMouseLeave={e => e.currentTarget.style.background = A}
+          >
             Inscríbete Ahora
-          </Button>
-          <Button size="lg" variant="outline" onClick={() => scrollTo('#sobre')}>
+          </button>
+          <button
+            onClick={() => go('#sobre')}
+            className="px-9 py-3 font-bold text-sm tracking-wide uppercase border transition-colors"
+            style={{ color: D, borderColor: 'rgba(240,232,216,.3)', background: 'transparent' }}
+            onMouseEnter={e => { e.currentTarget.style.borderColor = D }}
+            onMouseLeave={e => { e.currentTarget.style.borderColor = 'rgba(240,232,216,.3)' }}
+          >
             Conoce la Ruta
-          </Button>
+          </button>
         </div>
       </div>
 
       {/* Scroll indicator */}
       <div
-        className="absolute bottom-44 left-1/2 -translate-x-1/2 flex flex-col items-center gap-2 text-[10px] tracking-widest uppercase z-10"
-        style={{ color: 'rgba(240,232,216,0.35)' }}
+        className="absolute bottom-40 left-1/2 -translate-x-1/2 flex flex-col items-center gap-2 z-10"
+        style={{ color: M }}
       >
-        <span>Desplaza</span>
-        <div
-          className="w-px h-10 animate-scroll-pulse"
-          style={{ background: 'linear-gradient(to bottom, #c47818, transparent)' }}
-        />
+        <div className="w-px h-10 animate-scroll-pulse" style={{ background: `linear-gradient(to bottom, ${A}, transparent)` }} />
       </div>
 
-      {/* Countdown — simple bar at bottom */}
+      {/* Countdown strip */}
       <div
-        className="absolute bottom-0 left-0 right-0 py-4 px-6 flex flex-wrap items-center justify-center gap-6 z-10 border-t"
-        style={{
-          background: 'rgba(22,16,10,0.92)',
-          borderColor: 'rgba(196,120,24,0.18)',
-        }}
+        className="absolute bottom-0 left-0 right-0 py-4 px-6 flex flex-wrap items-center justify-center gap-8 z-10"
+        style={{ borderTop: `1px solid rgba(196,120,24,.2)`, background: 'rgba(16,9,2,.85)' }}
       >
-        <p
-          className="text-[10px] tracking-widest uppercase"
-          style={{ color: 'rgba(240,232,216,0.45)' }}
-        >
+        <span className="text-[10px] tracking-[.3em] uppercase" style={{ color: M }}>
           Faltan para el arranque
-        </p>
-        <div className="flex items-center gap-3">
-          <CountdownBlock value={days}  label="Días"  />
-          <Sep />
-          <CountdownBlock value={hours} label="Horas" />
-          <Sep />
-          <CountdownBlock value={mins}  label="Min"   />
-          <Sep />
-          <CountdownBlock value={secs}  label="Seg"   />
+        </span>
+        <div className="flex items-end gap-3">
+          <Num value={days}  label="Días"  />
+          <span className="font-title text-2xl pb-1 animate-blink" style={{ color: `rgba(196,120,24,.45)` }}>:</span>
+          <Num value={hours} label="Horas" />
+          <span className="font-title text-2xl pb-1 animate-blink" style={{ color: `rgba(196,120,24,.45)` }}>:</span>
+          <Num value={mins}  label="Min"   />
+          <span className="font-title text-2xl pb-1 animate-blink" style={{ color: `rgba(196,120,24,.45)` }}>:</span>
+          <Num value={secs}  label="Seg"   />
         </div>
       </div>
     </section>
   )
 }
 
-/* Stats ribbon — warm amber stripe, like a race highlight */
+/* ─── Stats Ribbon ──────────────────────────────────────────────────────────── */
 export function StatsRibbon() {
   return (
-    <div
-      className="flex flex-wrap justify-center border-y"
-      style={{
-        background: '#c47818',
-        borderColor: '#8f5510',
-      }}
-    >
-      {STATS.map((s, i) => (
-        <div
-          key={i}
-          className="flex flex-col items-center flex-1 min-w-[140px] py-6 px-4 gap-0.5"
-          style={{ borderRight: i < STATS.length - 1 ? '1px solid rgba(143,85,16,0.4)' : 'none' }}
-        >
-          <strong className="font-title text-3xl tracking-wide text-white">{s.value}</strong>
-          <span
-            className="text-[10px] font-semibold uppercase tracking-[.2em]"
-            style={{ color: 'rgba(255,255,255,0.72)' }}
+    <div style={{ background: A, borderTop: '3px solid #8f5510', borderBottom: '3px solid #8f5510' }}>
+      <div className="max-w-6xl mx-auto flex flex-wrap justify-between">
+        {STATS.map((s, i) => (
+          <div
+            key={i}
+            className="flex-1 min-w-[130px] py-5 px-4 text-center"
+            style={{ borderRight: i < STATS.length - 1 ? '1px solid rgba(143,85,16,.45)' : 'none' }}
           >
-            {s.label}
-          </span>
-        </div>
-      ))}
+            <p className="font-title text-3xl text-white leading-none tracking-wide">{s.value}</p>
+            <p className="text-[10px] font-semibold uppercase tracking-[.2em] mt-1" style={{ color: 'rgba(255,255,255,.72)' }}>
+              {s.label}
+            </p>
+          </div>
+        ))}
+      </div>
     </div>
   )
 }

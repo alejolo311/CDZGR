@@ -48,7 +48,7 @@ export default {
         /* slate blue — used for Paseo/secondary route */
         emerald: { race: '#4a7aaa', 'race-dark': '#2e5a88' },
         /* warm darks for hero/footer sections */
-        earth: { dark: '#16100a', mid: '#221a0e' },
+        earth: { dark: '#1a1208', mid: '#221609', panel: '#2c1f0e' },
       },
       fontFamily: {
         title: ['"Bebas Neue"', 'sans-serif'],
