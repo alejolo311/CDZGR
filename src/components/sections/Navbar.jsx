@@ -1,5 +1,5 @@
 import { useState } from 'react'
-import { Menu, X, Hexagon } from 'lucide-react'
+import { Menu, X, Mountain } from 'lucide-react'
 import { Button } from '@/components/ui/button'
 import { useScrollY } from '@/hooks/useScrollY'
 import { cn } from '@/lib/utils'
@@ -28,7 +28,9 @@ export default function Navbar() {
     <nav
       className={cn(
         'fixed top-0 left-0 right-0 z-50 transition-all duration-300',
-        scrolled ? 'bg-black/95 backdrop-blur-md shadow-[0_2px_20px_rgba(0,0,0,.5)] py-3' : 'py-5'
+        scrolled
+          ? 'bg-[#060d06]/96 backdrop-blur-md border-b border-primary/12 shadow-[0_2px_24px_rgba(0,0,0,.55)] py-3'
+          : 'py-5'
       )}
     >
       <div className="max-w-6xl mx-auto px-6 flex items-center justify-between gap-6">
@@ -38,7 +40,7 @@ export default function Navbar() {
           onClick={(e) => { e.preventDefault(); scrollTo('#hero') }}
           className="flex items-center gap-2.5 font-title text-2xl tracking-widest text-white hover:text-primary transition-colors"
         >
-          <Hexagon className="text-primary w-7 h-7 fill-primary/20" />
+          <Mountain className="text-primary w-6 h-6" strokeWidth={1.5} />
           CAÍDOS <span className="text-primary">DEL ZARZO</span>
         </a>
 
@@ -48,7 +50,7 @@ export default function Navbar() {
             <li key={href}>
               <button
                 onClick={() => scrollTo(href)}
-                className="text-white/80 text-sm font-medium px-3 py-2 rounded-lg hover:bg-white/8 hover:text-white transition-all"
+                className="text-white/75 text-sm font-medium px-3 py-2 rounded-lg hover:bg-white/8 hover:text-white transition-all"
               >
                 {label}
               </button>
@@ -73,7 +75,7 @@ export default function Navbar() {
 
       {/* Mobile menu */}
       {open && (
-        <div className="lg:hidden fixed inset-0 bg-black/98 backdrop-blur-lg flex flex-col items-center justify-center gap-4 z-40">
+        <div className="lg:hidden fixed inset-0 bg-[#060d06]/98 backdrop-blur-lg flex flex-col items-center justify-center gap-4 z-40">
           {NAV_LINKS.map(({ href, label }) => (
             <button
               key={href}

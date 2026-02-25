@@ -1,17 +1,20 @@
 import { Card, CardContent } from '@/components/ui/card'
 import { FEATURES, ABOUT_CARDS } from '@/lib/constants'
 
-function SectionHeader({ tag, title, desc, light = false }) {
+function SectionHeader({ tag, title, desc }) {
   return (
     <div className="text-center mb-16">
-      <span className="inline-block bg-primary/15 text-primary px-3.5 py-1 rounded-full text-xs font-bold tracking-[.12em] uppercase mb-3">
-        {tag}
-      </span>
-      <h2 className={`font-title text-5xl lg:text-6xl tracking-wide mb-4 ${light ? 'text-white' : 'text-white'}`}>
+      {/* Horizontal rule label — trail marker style, not tech pill */}
+      <div className="flex items-center justify-center gap-3 mb-5">
+        <div className="h-px flex-1 max-w-[64px] bg-gradient-to-r from-transparent to-primary/65" />
+        <span className="text-primary text-[10px] font-bold tracking-[.38em] uppercase">{tag}</span>
+        <div className="h-px flex-1 max-w-[64px] bg-gradient-to-l from-transparent to-primary/65" />
+      </div>
+      <h2 className="font-title text-5xl lg:text-6xl tracking-wide mb-4 text-white">
         {title}
       </h2>
       {desc && (
-        <p className="text-muted-foreground max-w-lg mx-auto text-base">{desc}</p>
+        <p className="text-muted-foreground max-w-lg mx-auto text-base leading-relaxed">{desc}</p>
       )}
     </div>
   )
@@ -21,7 +24,7 @@ export { SectionHeader }
 
 export default function About() {
   return (
-    <section id="sobre" className="py-24">
+    <section id="sobre" className="py-24 topo-bg">
       <div className="max-w-6xl mx-auto px-6">
         <SectionHeader
           tag="La Experiencia"
@@ -46,12 +49,21 @@ export default function About() {
               paisaje en el <strong className="text-white">Paseo</strong>, garantizamos una experiencia que recordarás toda la vida.
             </p>
 
-            <ul className="space-y-3">
+            {/* Feature list — triangle markers instead of tech circles */}
+            <ul className="space-y-3.5">
               {FEATURES.map((f) => (
                 <li key={f} className="flex items-center gap-3 text-muted-foreground text-sm">
-                  <span className="w-5 h-5 rounded-full bg-primary/15 text-primary flex items-center justify-center text-[11px] font-bold flex-shrink-0">
-                    ✓
-                  </span>
+                  {/* Mountain peak / trail marker */}
+                  <span
+                    className="flex-shrink-0 mt-0.5"
+                    style={{
+                      width: 0,
+                      height: 0,
+                      borderLeft: '5px solid transparent',
+                      borderRight: '5px solid transparent',
+                      borderBottom: '8px solid rgba(84,165,49,.85)',
+                    }}
+                  />
                   {f}
                 </li>
               ))}
