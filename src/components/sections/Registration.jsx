@@ -56,9 +56,20 @@ export default function Registration() {
   useEffect(() => {
     const params = new URLSearchParams(window.location.search)
     const estado = params.get('inscripcion')
-    if (estado) {
-      setSuccess(estado)
-      window.history.replaceState({}, '', window.location.pathname)
+    if (!estado) return
+
+    setSuccess(estado)
+    window.history.replaceState({}, '', window.location.pathname)
+
+    // Solo al confirmar pago exitoso enviamos el correo de confirmación
+    if (estado === 'ok') {
+      const raw = sessionStorage.getItem('cdzgr_pago')
+      if (raw) {
+        sessionStorage.removeItem('cdzgr_pago')
+        supabase.functions
+          .invoke('send-confirmation', { body: JSON.parse(raw) })
+          .catch(err => console.error('[Email confirmación]', err))
+      }
     }
   }, [])
 
@@ -121,7 +132,17 @@ export default function Registration() {
         externalRef: data.id,
       })
 
-      // 3. Redirigir al checkout de MercadoPago
+      // 3. Persistir datos para el email (la página se recarga al volver de MP)
+      sessionStorage.setItem('cdzgr_pago', JSON.stringify({
+        nombre:      form.nombre,
+        apellido:    form.apellido,
+        email:       form.email,
+        categoria:   form.categoria,
+        subcategoria: form.subcategoria || null,
+        precio_cop:  cat.priceNum,
+      }))
+
+      // 4. Redirigir al checkout de MercadoPago
       window.location.href = url
     } catch (err) {
       console.error('[Inscripción] Error:', err)
