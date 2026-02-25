@@ -2,25 +2,26 @@
 export const EVENT = {
   name:      'Caídos del Zarzo',
   year:      2026,
-  date:      '2026-06-14T06:30:00',
-  dateLabel: '14 de Junio 2026',
-  location:  'Plaza Central, Villa del Zarzo',
+  date:      '2026-09-20T06:30:00',
+  dateLabel: '20 de Septiembre 2026',
+  location:  'Plaza Central, Sevilla Valle',
+  organizer: 'Caídos del Zarzo SAS',
   hashtag:   '#CaidosDelZarzo2026',
   email:     'info@caidosdelzarzo.co',
   whatsapp:  '+57 300 123 4567',
   whatsappHref: 'https://wa.me/573001234567',
-  address:   'Centro Deportivo El Zarzo, Villa del Zarzo, Colombia',
+  address:   'Sevilla, Valle del Cauca, Colombia',
   horario:   'Lun – Vie: 9am–6pm · Sáb: 10am–2pm',
 }
 
 // ─── Stats ribbon ─────────────────────────────────────────────────────────────
 export const STATS = [
-  { value: '120 km', label: 'Distancia Gravel' },
-  { value: '3 200 m', label: 'Desnivel + Gravel' },
-  { value: '45 km', label: 'Distancia Paseo' },
-  { value: '900 m', label: 'Desnivel + Paseo' },
-  { value: '500+', label: 'Cupos Totales' },
-  { value: '8 h', label: 'Tiempo máx. Gravel' },
+  { value: '100 km',   label: 'Distancia Gravel' },
+  { value: '3 500 m',  label: 'Desnivel + Gravel' },
+  { value: '50 km',    label: 'Distancia Paseo' },
+  { value: '1 200 m',  label: 'Desnivel + Paseo' },
+  { value: '500+',     label: 'Cupos Totales' },
+  { value: '8 h',      label: 'Tiempo máx. Gravel' },
 ]
 
 // ─── About feature list ───────────────────────────────────────────────────────
@@ -45,17 +46,17 @@ export const ABOUT_CARDS = [
 // ─── Categories ───────────────────────────────────────────────────────────────
 export const CATEGORIES = {
   gravel: {
-    id:       'gravel',
-    badge:    '⚡ COMPETITIVA',
-    icon:     '🏆',
-    name:     'Gravel Race',
-    subtitle: 'Para los que no conocen el límite',
-    price:    '$120.000 COP',
+    id:         'gravel',
+    badge:      '⚡ COMPETITIVA',
+    icon:       '🏆',
+    name:       'Gravel Race',
+    subtitle:   'Para los que no conocen el límite',
+    price:      '$120.000 COP',
+    difficulty: 5,
     specs: [
-      { label: 'Distancia',   value: '120 km' },
-      { label: 'Desnivel +',  value: '3 200 m' },
+      { label: 'Distancia',   value: '100 km' },
+      { label: 'Desnivel +',  value: '3 500 m' },
       { label: 'Tiempo máx.', value: '8 horas' },
-      { label: 'Dificultad',  value: '⬛⬛⬛⬛⬛' },
       { label: 'Cupos',       value: '300 participantes' },
       { label: 'Inscripción', value: '$120.000 COP' },
     ],
@@ -73,17 +74,17 @@ export const CATEGORIES = {
     subcats: ['Sub-23', 'Open M/F', 'Master 35+', 'Master 45+', 'Master 55+'],
   },
   paseo: {
-    id:       'paseo',
-    badge:    '🌿 RECREATIVA',
-    icon:     '🌄',
-    name:     'El Paseo',
-    subtitle: 'Para disfrutar sin presión de tiempo',
-    price:    '$60.000 COP',
+    id:         'paseo',
+    badge:      '🌿 RECREATIVA',
+    icon:       '🌄',
+    name:       'El Paseo',
+    subtitle:   'Para disfrutar sin presión de tiempo',
+    price:      '$60.000 COP',
+    difficulty: 2,
     specs: [
-      { label: 'Distancia',   value: '45 km' },
-      { label: 'Desnivel +',  value: '900 m' },
+      { label: 'Distancia',   value: '50 km' },
+      { label: 'Desnivel +',  value: '1 200 m' },
       { label: 'Tiempo máx.', value: 'Sin límite*' },
-      { label: 'Dificultad',  value: '⬛⬛⬜⬜⬜' },
       { label: 'Cupos',       value: '200 participantes' },
       { label: 'Inscripción', value: '$60.000 COP' },
     ],
@@ -106,27 +107,27 @@ export const CATEGORIES = {
 // ─── Route waypoints ──────────────────────────────────────────────────────────
 export const WAYPOINTS = {
   gravel: [
-    { type: 'start', label: '🟢 Salida – Plaza Central', km: 'Km 0 · Alt. 1 600 m', desc: 'Salida masiva a las 6:30 am con neutralización por el casco urbano.' },
-    { type: 'feed',  label: 'Avituallamiento 1 – Vereda Los Pinos', km: 'Km 22 · Alt. 2 100 m', desc: 'Primer control. Agua, electrolitos, frutas y geles.' },
-    { type: 'climb', label: '⛰️ Alto del Zarzo – Punto Máximo', km: 'Km 40 · Alt. 3 050 m', desc: 'El punto más alto de la carrera. Vista panorámica de 360°. ¡Fotógrafo oficial aquí!' },
-    { type: 'feed',  label: 'Avituallamiento 2 – Finca La Esperanza', km: 'Km 55 · Alt. 1 850 m', desc: 'Descanso mayor. Comida caliente disponible. Asistencia mecánica.' },
-    { type: 'feed',  label: 'Avituallamiento 3 – Puente El Diablo', km: 'Km 75 · Alt. 1 200 m', desc: 'Tramo de descenso técnico previo. Zona de hidratación.' },
-    { type: 'feed',  label: 'Avituallamiento 4 – Quebrada Honda', km: 'Km 95 · Alt. 1 550 m', desc: 'Última subida importante. Agua y snacks para el sprint final.' },
-    { type: 'end',   label: '🏁 Meta – Parque El Zarzo', km: 'Km 120 · Alt. 1 630 m', desc: '¡Lo lograste! Recibe tu medalla finisher, cerveza artesanal y celebra.' },
+    { type: 'start', label: '🟢 Salida – Plaza Central, Sevilla', km: 'Km 0 · Alt. 1 600 m', desc: 'Salida masiva a las 6:30 am con neutralización por el casco urbano.' },
+    { type: 'feed',  label: 'Avituallamiento 1 – Vereda Los Pinos', km: 'Km 20 · Alt. 2 100 m', desc: 'Primer control. Agua, electrolitos, frutas y geles.' },
+    { type: 'climb', label: '⛰️ Alto del Zarzo – Punto Máximo', km: 'Km 38 · Alt. 3 050 m', desc: 'El punto más alto de la carrera. Vista panorámica de 360°. ¡Fotógrafo oficial aquí!' },
+    { type: 'feed',  label: 'Avituallamiento 2 – Finca La Esperanza', km: 'Km 52 · Alt. 1 850 m', desc: 'Descanso mayor. Comida caliente disponible. Asistencia mecánica.' },
+    { type: 'feed',  label: 'Avituallamiento 3 – Puente El Diablo', km: 'Km 68 · Alt. 1 200 m', desc: 'Tramo de descenso técnico previo. Zona de hidratación.' },
+    { type: 'feed',  label: 'Avituallamiento 4 – Quebrada Honda', km: 'Km 86 · Alt. 1 550 m', desc: 'Última subida importante. Agua y snacks para el sprint final.' },
+    { type: 'end',   label: '🏁 Meta – Parque El Zarzo', km: 'Km 100 · Alt. 1 630 m', desc: '¡Lo lograste! Recibe tu medalla finisher, cerveza artesanal y celebra.' },
   ],
   paseo: [
-    { type: 'start', label: '🟢 Salida – Plaza Central', km: 'Km 0 · Alt. 1 600 m', desc: 'Salida a las 8:00 am. Ambiente familiar y relajado.' },
+    { type: 'start', label: '🟢 Salida – Plaza Central, Sevilla', km: 'Km 0 · Alt. 1 600 m', desc: 'Salida a las 8:00 am. Ambiente familiar y relajado.' },
     { type: 'feed',  label: 'Avituallamiento 1 – Mirador del Valle', km: 'Km 15 · Alt. 1 900 m', desc: 'Vista espectacular. Agua, frutas y snacks.' },
-    { type: 'climb', label: '⛰️ Punto Más Alto – Loma Verde', km: 'Km 25 · Alt. 2 200 m', desc: 'El punto más elevado del paseo. ¡Fotógrafo oficial!' },
-    { type: 'feed',  label: 'Avituallamiento 2 – Finca La Esperanza', km: 'Km 35 · Alt. 1 750 m', desc: 'Descanso mayor. Comida disponible. Zona de juegos para niños.' },
-    { type: 'end',   label: '🏁 Meta – Parque El Zarzo', km: 'Km 45 · Alt. 1 630 m', desc: '¡Llegaste! Medalla finisher y acceso a la fiesta post-carrera.' },
+    { type: 'climb', label: '⛰️ Punto Más Alto – Loma Verde', km: 'Km 26 · Alt. 2 200 m', desc: 'El punto más elevado del paseo. ¡Fotógrafo oficial!' },
+    { type: 'feed',  label: 'Avituallamiento 2 – Finca La Esperanza', km: 'Km 38 · Alt. 1 750 m', desc: 'Descanso mayor. Comida disponible. Zona de juegos para niños.' },
+    { type: 'end',   label: '🏁 Meta – Parque El Zarzo', km: 'Km 50 · Alt. 1 630 m', desc: '¡Llegaste! Medalla finisher y acceso a la fiesta post-carrera.' },
   ],
 }
 
 // ─── Schedule ─────────────────────────────────────────────────────────────────
 export const SCHEDULE = {
   sabado: [
-    { time: '10:00 am', title: 'Apertura de Registro y Entrega de Kits', desc: 'Centro Deportivo El Zarzo. Presenta tu documento de identidad y recibe tu kit oficial. Horario hasta las 8:00 pm.', highlight: false },
+    { time: '10:00 am', title: 'Apertura de Registro y Entrega de Kits', desc: 'Centro Deportivo, Sevilla Valle. Presenta tu documento de identidad y recibe tu kit oficial. Horario hasta las 8:00 pm.', highlight: false },
     { time: '3:00 pm',  title: 'Revisión Técnica de Bicicletas', desc: 'Técnicos verificarán frenos, neumáticos, transmisión y equipamiento de seguridad.', highlight: false },
     { time: '4:00 pm',  title: 'Briefing Obligatorio – Gravel Race', desc: 'Reunión de participantes con los organizadores. Asistencia obligatoria. Escenario principal.', highlight: false },
     { time: '5:00 pm',  title: 'Briefing – El Paseo', desc: 'Reunión informativa para participantes del Paseo. Carpa B.', highlight: false },
@@ -135,8 +136,8 @@ export const SCHEDULE = {
   ],
   domingo: [
     { time: '4:30 am', title: 'Apertura zona de salida', desc: 'Acceso al corral de la Gravel Race. Último control de equipamiento.', highlight: false },
-    { time: '6:30 am', title: '🏁 Largada – Gravel Race 120km', desc: 'Salida oficial con neutralización por Villa del Zarzo. ¡El momento que todos esperaban!', highlight: true },
-    { time: '8:00 am', title: '🌄 Largada – El Paseo 45km', desc: 'Salida festiva y relajada. ¡A disfrutar la montaña!', highlight: true },
+    { time: '6:30 am', title: '🏁 Largada – Gravel Race 100km', desc: 'Salida oficial con neutralización por Sevilla Valle. ¡El momento que todos esperaban!', highlight: true },
+    { time: '8:00 am', title: '🌄 Largada – El Paseo 50km', desc: 'Salida festiva y relajada. ¡A disfrutar la montaña!', highlight: true },
     { time: '11:00 am', title: 'Primeros Finishers Gravel Race', desc: 'Se esperan los primeros ciclistas de elite en meta. Zona de celebración activa.', highlight: false },
     { time: '1:00 pm', title: 'Primeros Finishers Paseo', desc: 'Llegada estimada de los primeros participantes del Paseo a meta.', highlight: false },
     { time: '2:30 pm', title: 'Almuerzo Comunitario', desc: 'Comida típica de la región para todos los participantes y acompañantes.', highlight: false },
@@ -154,7 +155,7 @@ export const PODIUM = [
 
 export const SPECIAL_PRIZES = [
   { icon: '🏆', title: 'Rey/Reina de la Montaña', desc: 'Mejor tiempo en el segmento del Alto del Zarzo. Kit especial + $200.000 COP' },
-  { icon: '⚡', title: 'Sprint Intermedio', desc: 'Mayor velocidad en el sprint del Km 75. Voucher de tienda oficial.' },
+  { icon: '⚡', title: 'Sprint Intermedio', desc: 'Mayor velocidad en el sprint del Km 68. Voucher de tienda oficial.' },
   { icon: '👴', title: 'Veterano Más Veloz', desc: 'Mayor de 55 años con mejor tiempo general. Trofeo especial + kit.' },
   { icon: '🌟', title: 'Subcategorías Gravel', desc: 'Podio en Sub-23, Open, Master 35+, 45+ y 55+. Trofeo + kit.' },
   { icon: '🤳', title: 'Mejor Foto del Evento', desc: 'Vota en Instagram con #CaidosDelZarzo2026. Premio: inscripción 2027 gratis.' },
@@ -164,9 +165,9 @@ export const SPECIAL_PRIZES = [
 // ─── FAQ ──────────────────────────────────────────────────────────────────────
 export const FAQ_ITEMS = [
   { q: '¿Qué tipo de bicicleta necesito?', a: 'Para la Gravel Race es imprescindible una bicicleta de Gravel o MTB con neumáticos de al menos 35mm y frenos de disco. Para El Paseo cualquier bicicleta de terreno mixto: MTB, gravel, híbrida o cicloturista.' },
-  { q: '¿Puedo inscribirme el mismo día del evento?', a: 'No. La inscripción cierra el 9 de junio de 2026 o cuando se agoten los cupos. No habrá inscripciones el día del evento.' },
-  { q: '¿Hay política de reembolso?', a: 'Sí. Cancelaciones hasta el 30 de mayo reciben el 80% del valor. Del 31 de mayo al 9 de junio se reembolsa el 50%. Después no hay reembolso, pero puedes ceder tu inscripción (costo administrativo $15.000 COP).' },
-  { q: '¿Incluye transporte o alojamiento?', a: 'La inscripción no incluye transporte ni alojamiento. Tenemos alianzas con hoteles locales con tarifas especiales. Escríbenos para el código de descuento.' },
+  { q: '¿Puedo inscribirme el mismo día del evento?', a: 'No. La inscripción cierra el 15 de septiembre de 2026 o cuando se agoten los cupos. No habrá inscripciones el día del evento.' },
+  { q: '¿Hay política de reembolso?', a: 'Sí. Cancelaciones hasta el 5 de septiembre reciben el 80% del valor. Del 6 al 15 de septiembre se reembolsa el 50%. Después no hay reembolso, pero puedes ceder tu inscripción (costo administrativo $15.000 COP).' },
+  { q: '¿Incluye transporte o alojamiento?', a: 'La inscripción no incluye transporte ni alojamiento. Tenemos alianzas con hoteles locales en Sevilla con tarifas especiales. Escríbenos para el código de descuento.' },
   { q: '¿Dónde dejo la bicicleta al terminar?', a: 'Habrá zona de parqueo de bicicletas vigilada y gratuita en meta desde las 4:30 am hasta las 7:00 pm.' },
   { q: '¿Puedo llevar a mis hijos al evento?', a: '¡Claro! Los menores de 16 años no pueden participar en las categorías de carrera, pero hay zona de actividades recreativas para niños en el área de meta.' },
   { q: '¿Se puede participar en grupo?', a: 'Cada persona debe inscribirse individualmente. Puedes usar el código de grupo para aparecer agrupados en los resultados y tener corral de salida cercano.' },

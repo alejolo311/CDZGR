@@ -6,9 +6,35 @@ const B = '#4a7aaa'   /* paseo accent */
 const D = '#f0e8d8'
 const M = 'rgba(240,232,216,.55)'
 
+/* ── Mountain SVG ─────────────────────────────────────────────────────────── */
+function MtnIcon({ filled, accent }) {
+  return (
+    <svg width="20" height="20" viewBox="0 0 64 64" fill="none" aria-hidden="true">
+      <polygon
+        points="32,8 6,52 58,52"
+        fill={filled ? accent : 'rgba(240,232,216,0.1)'}
+      />
+      {filled && (
+        <polygon points="32,8 24,26 40,26" fill="rgba(240,232,216,0.28)" />
+      )}
+    </svg>
+  )
+}
+
+/* ── Difficulty meter: 5 mountain icons filled up to `level` ────────────── */
+function DifficultyMeter({ level, accent }) {
+  return (
+    <div className="flex items-end gap-0.5">
+      {Array.from({ length: 5 }, (_, i) => (
+        <MtnIcon key={i} filled={i < level} accent={accent} />
+      ))}
+    </div>
+  )
+}
+
 function SpecRow({ label, value, accent }) {
   return (
-    <div className="flex justify-between items-baseline py-2" style={{ borderBottom: '1px solid rgba(255,255,255,.08)' }}>
+    <div className="flex justify-between items-center py-2" style={{ borderBottom: '1px solid rgba(255,255,255,.08)' }}>
       <span className="text-[11px] uppercase tracking-[.2em]" style={{ color: M }}>{label}</span>
       <strong className="text-sm font-bold" style={{ color: accent }}>{value}</strong>
     </div>
@@ -44,6 +70,12 @@ function CategoryBlock({ cat, accent, isLast }) {
           Especificaciones
         </p>
         {cat.specs.map(s => <SpecRow key={s.label} label={s.label} value={s.value} accent={accent} />)}
+
+        {/* Difficulty — mountain SVG meter */}
+        <div className="flex justify-between items-center py-2" style={{ borderBottom: '1px solid rgba(255,255,255,.08)' }}>
+          <span className="text-[11px] uppercase tracking-[.2em]" style={{ color: M }}>Dificultad</span>
+          <DifficultyMeter level={cat.difficulty} accent={accent} />
+        </div>
       </div>
 
       {/* Kit */}
