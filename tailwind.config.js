@@ -43,8 +43,8 @@ export default {
           DEFAULT:    'hsl(var(--card))',
           foreground: 'hsl(var(--card-foreground))',
         },
-        orange: { DEFAULT: '#f97316', dark: '#c2410c' },
-        emerald: { race: '#22c55e', 'race-dark': '#15803d' },
+        orange: { DEFAULT: '#54a531', dark: '#2e6818' },
+        emerald: { race: '#2e8cc8', 'race-dark': '#1a5a8a' },
       },
       fontFamily: {
         title: ['"Bebas Neue"', 'sans-serif'],

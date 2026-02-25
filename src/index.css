@@ -4,25 +4,25 @@
 
 @layer base {
   :root {
-    --background:         0 0% 6%;
-    --foreground:         220 13% 91%;
-    --card:               0 0% 12%;
-    --card-foreground:    220 13% 91%;
-    --popover:            0 0% 10%;
-    --popover-foreground: 220 13% 91%;
-    --primary:            24.6 95% 53.1%;
+    --background:         120 12% 5%;
+    --foreground:         100 20% 87%;
+    --card:               120 10% 9%;
+    --card-foreground:    100 20% 87%;
+    --popover:            120 10% 8%;
+    --popover-foreground: 100 20% 87%;
+    --primary:            102 54% 42%;
     --primary-foreground: 0 0% 100%;
-    --secondary:          0 0% 14%;
-    --secondary-foreground: 220 13% 91%;
-    --muted:              0 0% 14%;
-    --muted-foreground:   215 14% 55%;
-    --accent:             0 0% 8%;
-    --accent-foreground:  220 13% 91%;
+    --secondary:          120 8% 14%;
+    --secondary-foreground: 100 20% 87%;
+    --muted:              120 8% 14%;
+    --muted-foreground:   110 10% 55%;
+    --accent:             120 10% 8%;
+    --accent-foreground:  100 20% 87%;
     --destructive:        0 84% 60%;
     --destructive-foreground: 0 0% 100%;
-    --border:             0 0% 18%;
-    --input:              0 0% 14%;
-    --ring:               24.6 95% 53.1%;
+    --border:             120 8% 20%;
+    --input:              120 8% 14%;
+    --ring:               102 54% 42%;
     --radius:             0.75rem;
   }
 
@@ -43,17 +43,28 @@
   }
 
   ::-webkit-scrollbar       { width: 5px; }
-  ::-webkit-scrollbar-track { background: hsl(0 0% 8%); }
+  ::-webkit-scrollbar-track { background: hsl(120 10% 7%); }
   ::-webkit-scrollbar-thumb { background: hsl(var(--primary)); border-radius: 3px; }
 }
 
 @layer utilities {
   .hero-grid {
     background-image:
-      linear-gradient(rgba(249,115,22,.06) 1px, transparent 1px),
-      linear-gradient(90deg, rgba(249,115,22,.06) 1px, transparent 1px);
-    background-size: 60px 60px;
-    animation: gridMove 20s linear infinite;
+      repeating-linear-gradient(
+        35deg,
+        transparent 0px,
+        transparent 55px,
+        rgba(84,165,49,.045) 55px,
+        rgba(84,165,49,.045) 56px
+      ),
+      repeating-linear-gradient(
+        -35deg,
+        transparent 0px,
+        transparent 80px,
+        rgba(46,140,200,.03) 80px,
+        rgba(46,140,200,.03) 81px
+      );
+    animation: gridMove 40s linear infinite;
   }
 
   .font-title { font-family: 'Bebas Neue', sans-serif; }

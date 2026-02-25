@@ -8,8 +8,8 @@ import { CATEGORIES } from '@/lib/constants'
 function CategoryCard({ cat, isGravel }) {
   const borderColor = isGravel ? 'border-orange/30' : 'border-emerald-race/30'
   const bg = isGravel
-    ? 'linear-gradient(135deg, #1a0a00 0%, #2d1200 100%)'
-    : 'linear-gradient(135deg, #001a08 0%, #002d12 100%)'
+    ? 'linear-gradient(135deg, #06130a 0%, #0b2010 100%)'
+    : 'linear-gradient(135deg, #060a14 0%, #0a1020 100%)'
   const accentColor = isGravel ? 'text-primary' : 'text-emerald-race'
   const badgeVariant = isGravel ? 'default' : 'success'
   const btnVariant = isGravel ? 'default' : 'success'

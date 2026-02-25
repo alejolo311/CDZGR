@@ -92,7 +92,7 @@ export default function Contact() {
                   <Label>Mensaje</Label>
                   <Textarea rows={4} placeholder="Escribe tu consulta..." value={form.mensaje} onChange={(e) => set('mensaje', e.target.value)} />
                 </div>
-                <Button type="submit" className="w-full" style={sent ? { background: '#22c55e' } : {}}>
+                <Button type="submit" className="w-full" style={sent ? { background: '#2e8cc8' } : {}}>
                   {sent ? '✓ Mensaje enviado' : 'Enviar Mensaje'}
                 </Button>
               </form>

@@ -31,19 +31,40 @@ export default function Hero() {
       className="relative min-h-screen flex flex-col items-center justify-center overflow-hidden"
       style={{
         background: `
-          radial-gradient(ellipse at 20% 50%, rgba(249,115,22,.18) 0%, transparent 60%),
-          radial-gradient(ellipse at 80% 20%, rgba(34,197,94,.10) 0%, transparent 50%),
-          linear-gradient(160deg, #0a0a0a 0%, #111 50%, #0f1a0f 100%)
+          radial-gradient(ellipse at 15% 55%, rgba(84,165,49,.22) 0%, transparent 55%),
+          radial-gradient(ellipse at 85% 15%, rgba(46,140,200,.18) 0%, transparent 50%),
+          radial-gradient(ellipse at 50% 90%, rgba(84,165,49,.10) 0%, transparent 40%),
+          linear-gradient(160deg, #060d06 0%, #0a150a 40%, #07101a 100%)
         `,
       }}
     >
-      {/* Animated grid */}
+      {/* Diagonal terrain lines (topo-map feel) */}
       <div className="absolute inset-0 hero-grid pointer-events-none" />
-      {/* Radial overlay */}
+      {/* Depth vignette */}
       <div
         className="absolute inset-0 pointer-events-none"
-        style={{ background: 'radial-gradient(ellipse at center, transparent 30%, rgba(10,10,10,.7) 100%)' }}
+        style={{ background: 'radial-gradient(ellipse at center, transparent 35%, rgba(6,11,6,.75) 100%)' }}
       />
+      {/* Mountain silhouette layers */}
+      <div className="absolute bottom-0 left-0 right-0 pointer-events-none" style={{ zIndex: 2 }}>
+        <svg viewBox="0 0 1440 300" preserveAspectRatio="none" className="w-full" style={{ height: '300px', display: 'block' }}>
+          {/* Far ridge — blue-dark haze */}
+          <path
+            d="M0,300 L0,210 L60,182 L130,195 L200,155 L270,172 L340,130 L410,152 L480,108 L550,138 L620,92 L690,118 L760,78 L830,105 L900,65 L970,95 L1040,75 L1110,105 L1180,85 L1250,112 L1320,90 L1380,108 L1440,95 L1440,300 Z"
+            fill="rgba(10,18,28,0.55)"
+          />
+          {/* Mid mountains — forest dark */}
+          <path
+            d="M0,300 L0,245 L90,215 L180,230 L260,190 L350,210 L430,168 L510,192 L590,152 L670,178 L750,148 L830,172 L910,138 L990,162 L1070,182 L1150,158 L1230,178 L1310,160 L1390,192 L1440,175 L1440,300 Z"
+            fill="rgba(8,16,8,0.72)"
+          />
+          {/* Foreground dark slope */}
+          <path
+            d="M0,300 L0,272 L180,258 L360,265 L480,248 L600,262 L720,252 L850,268 L1000,255 L1160,265 L1300,252 L1440,262 L1440,300 Z"
+            fill="rgba(6,10,6,0.88)"
+          />
+        </svg>
+      </div>
 
       {/* Content */}
       <div className="relative z-10 text-center px-6 pt-28 pb-52 max-w-4xl mx-auto">
@@ -101,7 +122,7 @@ export default function Hero() {
       </div>
 
       {/* Countdown bar */}
-      <div className="absolute bottom-0 left-0 right-0 bg-primary/12 backdrop-blur-md border-t border-primary/30 py-4 px-6 flex flex-wrap items-center justify-center gap-6 z-10">
+      <div className="absolute bottom-0 left-0 right-0 bg-primary/10 backdrop-blur-md border-t border-primary/25 py-4 px-6 flex flex-wrap items-center justify-center gap-6 z-10">
         <p className="text-muted-foreground text-xs tracking-widest uppercase">Faltan para el arranque</p>
         <div className="flex items-center gap-2">
           <CountdownBlock value={days}  label="Días" />
