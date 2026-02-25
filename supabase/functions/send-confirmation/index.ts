@@ -16,8 +16,8 @@
 import { serve } from 'https://deno.land/std@0.177.0/http/server.ts'
 
 const RESEND_KEY  = Deno.env.get('RESEND_API_KEY')!
-const FROM        = 'Caídos del Zarzo <inscripciones@caidosdelzarzo.co>'
-const REPLY_TO    = 'info@caidosdelzarzo.co'
+const FROM        = 'Caídos del Zarzo <inscripciones@gravel.caidosdelzarzo.com>'
+const REPLY_TO    = 'info@gravel.caidosdelzarzo.com'
 
 const cors = {
   'Access-Control-Allow-Origin':  '*',

@@ -27,7 +27,10 @@ export async function createMPPreference({ categoria, nombre, apellido, email, t
     throw new Error('Credenciales de pago no configuradas. Contacta al organizador.')
   }
 
-  const base = `${window.location.origin}${window.location.pathname}`
+  const PROD_URL = 'https://gravel.caidosdelzarzo.com'
+  const base = import.meta.env.DEV
+    ? `${window.location.origin}${window.location.pathname}`
+    : PROD_URL
 
   const preference = {
     items: [{
