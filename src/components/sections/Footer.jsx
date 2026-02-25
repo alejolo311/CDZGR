@@ -1,4 +1,4 @@
-import { Hexagon } from 'lucide-react'
+import { Mountain } from 'lucide-react'
 import { Separator } from '@/components/ui/separator'
 
 const FOOTER_LINKS = [
@@ -42,12 +42,26 @@ export default function Footer() {
   }
 
   return (
-    <footer className="bg-[#040904] border-t border-border">
+    <footer className="bg-[#040904] relative">
+      {/* Mountain ridge horizon — where the site meets the earth */}
+      <div className="w-full overflow-hidden pointer-events-none" style={{ height: '70px' }}>
+        <svg viewBox="0 0 1440 70" preserveAspectRatio="none" className="w-full h-full">
+          <path
+            d="M0,70 L0,42 L85,20 L195,48 L305,16 L435,44 L558,10 L680,36 L805,6 L935,30 L1065,10 L1195,40 L1320,18 L1440,38 L1440,70 Z"
+            fill="rgba(84,165,49,.07)"
+          />
+          <path
+            d="M0,70 L0,56 L160,36 L340,60 L510,28 L690,54 L870,24 L1050,52 L1230,30 L1440,52 L1440,70 Z"
+            fill="rgba(84,165,49,.04)"
+          />
+        </svg>
+      </div>
+
       <div className="max-w-6xl mx-auto px-6 py-16 grid grid-cols-2 md:grid-cols-4 gap-10">
         {/* Brand */}
         <div className="col-span-2 md:col-span-1">
           <div className="flex items-center gap-2.5 font-title text-2xl tracking-widest text-white mb-4">
-            <Hexagon className="text-primary w-7 h-7 fill-primary/20" />
+            <Mountain className="text-primary w-6 h-6" strokeWidth={1.5} />
             CAÍDOS <span className="text-primary">DEL ZARZO</span>
           </div>
           <p className="text-muted-foreground text-sm leading-relaxed">
@@ -76,7 +90,7 @@ export default function Footer() {
         ))}
       </div>
 
-      <Separator className="bg-border" />
+      <Separator className="bg-border/50" />
 
       <div className="max-w-6xl mx-auto px-6 py-6 flex flex-col sm:flex-row justify-between items-center gap-3">
         <p className="text-muted-foreground text-xs">© 2026 Caídos del Zarzo Gravel Race. Todos los derechos reservados.</p>

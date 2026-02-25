@@ -4,7 +4,7 @@ import { EVENT, STATS } from '@/lib/constants'
 
 function CountdownBlock({ value, label }) {
   return (
-    <div className="flex flex-col items-center min-w-[56px]">
+    <div className="flex flex-col items-center min-w-[52px]">
       <span className="font-title text-4xl text-primary leading-none">
         {String(value).padStart(2, '0')}
       </span>
@@ -31,46 +31,59 @@ export default function Hero() {
       className="relative min-h-screen flex flex-col items-center justify-center overflow-hidden"
       style={{
         background: `
-          radial-gradient(ellipse at 15% 55%, rgba(84,165,49,.22) 0%, transparent 55%),
-          radial-gradient(ellipse at 85% 15%, rgba(46,140,200,.18) 0%, transparent 50%),
-          radial-gradient(ellipse at 50% 90%, rgba(84,165,49,.10) 0%, transparent 40%),
+          radial-gradient(ellipse at 15% 55%, rgba(84,165,49,.2) 0%, transparent 52%),
+          radial-gradient(ellipse at 85% 15%, rgba(46,140,200,.16) 0%, transparent 48%),
+          radial-gradient(ellipse at 50% 100%, rgba(84,165,49,.12) 0%, transparent 38%),
           linear-gradient(160deg, #060d06 0%, #0a150a 40%, #07101a 100%)
         `,
       }}
     >
-      {/* Diagonal terrain lines (topo-map feel) */}
+      {/* Diagonal terrain contour lines */}
       <div className="absolute inset-0 hero-grid pointer-events-none" />
-      {/* Depth vignette */}
+
+      {/* Radial depth vignette */}
       <div
         className="absolute inset-0 pointer-events-none"
-        style={{ background: 'radial-gradient(ellipse at center, transparent 35%, rgba(6,11,6,.75) 100%)' }}
+        style={{ background: 'radial-gradient(ellipse at center, transparent 30%, rgba(5,9,5,.80) 100%)' }}
       />
-      {/* Mountain silhouette layers */}
+
+      {/* Mountain silhouette layers — far to near */}
       <div className="absolute bottom-0 left-0 right-0 pointer-events-none" style={{ zIndex: 2 }}>
-        <svg viewBox="0 0 1440 300" preserveAspectRatio="none" className="w-full" style={{ height: '300px', display: 'block' }}>
-          {/* Far ridge — blue-dark haze */}
+        <svg viewBox="0 0 1440 320" preserveAspectRatio="none" className="w-full" style={{ height: '320px', display: 'block' }}>
+          {/* Far ridge — blue-dark atmosphere haze */}
           <path
-            d="M0,300 L0,210 L60,182 L130,195 L200,155 L270,172 L340,130 L410,152 L480,108 L550,138 L620,92 L690,118 L760,78 L830,105 L900,65 L970,95 L1040,75 L1110,105 L1180,85 L1250,112 L1320,90 L1380,108 L1440,95 L1440,300 Z"
-            fill="rgba(10,18,28,0.55)"
+            d="M0,320 L0,215 L55,188 L120,202 L195,160 L265,178 L335,135 L405,158 L475,112 L548,140 L620,96 L692,122 L762,80 L835,108 L908,68 L975,98 L1042,78 L1112,108 L1182,88 L1252,115 L1322,93 L1382,110 L1440,98 L1440,320 Z"
+            fill="rgba(8,14,24,0.52)"
           />
-          {/* Mid mountains — forest dark */}
+          {/* Mid mountains — deep forest */}
           <path
-            d="M0,300 L0,245 L90,215 L180,230 L260,190 L350,210 L430,168 L510,192 L590,152 L670,178 L750,148 L830,172 L910,138 L990,162 L1070,182 L1150,158 L1230,178 L1310,160 L1390,192 L1440,175 L1440,300 Z"
-            fill="rgba(8,16,8,0.72)"
+            d="M0,320 L0,250 L85,218 L175,235 L258,195 L345,215 L428,172 L512,198 L594,155 L675,182 L752,150 L832,175 L912,140 L992,165 L1072,185 L1152,160 L1232,182 L1312,162 L1392,196 L1440,178 L1440,320 Z"
+            fill="rgba(7,14,7,0.74)"
           />
-          {/* Foreground dark slope */}
+          {/* Near dark slope with mist at base */}
           <path
-            d="M0,300 L0,272 L180,258 L360,265 L480,248 L600,262 L720,252 L850,268 L1000,255 L1160,265 L1300,252 L1440,262 L1440,300 Z"
-            fill="rgba(6,10,6,0.88)"
+            d="M0,320 L0,278 L175,262 L355,270 L478,252 L598,267 L718,256 L848,272 L1002,258 L1162,268 L1305,256 L1440,266 L1440,320 Z"
+            fill="rgba(5,9,5,0.90)"
+          />
+          {/* Mist / ground fog layer */}
+          <path
+            d="M0,320 L0,305 L360,298 L720,302 L1080,298 L1440,303 L1440,320 Z"
+            fill="rgba(84,165,49,0.04)"
           />
         </svg>
       </div>
 
       {/* Content */}
       <div className="relative z-10 text-center px-6 pt-28 pb-52 max-w-4xl mx-auto">
-        <p className="text-primary text-xs font-bold tracking-[.2em] uppercase mb-4 animate-fade-up">
-          Edición {EVENT.year} &nbsp;·&nbsp; Gravel Race
-        </p>
+
+        {/* Label: horizontal rule style, not a tech pill */}
+        <div className="flex items-center justify-center gap-3 mb-6 animate-fade-up">
+          <div className="h-px w-14 bg-gradient-to-r from-transparent to-primary/70" />
+          <p className="text-primary text-[10px] font-bold tracking-[.32em] uppercase whitespace-nowrap">
+            Edición {EVENT.year} · Gravel Race
+          </p>
+          <div className="h-px w-14 bg-gradient-to-l from-transparent to-primary/70" />
+        </div>
 
         <h1
           className="font-title leading-none text-white mb-6 animate-fade-up"
@@ -81,28 +94,32 @@ export default function Hero() {
         </h1>
 
         <p
-          className="text-white/65 mb-10 animate-fade-up"
+          className="text-white/60 mb-10 animate-fade-up"
           style={{ fontSize: 'clamp(1rem, 2.5vw, 1.35rem)', animationDelay: '200ms' }}
         >
           Polvo, adrenalina y gloria entre montañas.
         </p>
 
-        {/* Meta */}
+        {/* Meta info — organic flow, no "app box" */}
         <div
-          className="flex flex-wrap items-center justify-center gap-0 mb-10 bg-white/4 border border-border rounded-2xl px-8 py-5 animate-fade-up"
+          className="flex flex-wrap items-center justify-center mb-10 animate-fade-up"
           style={{ animationDelay: '300ms' }}
         >
           {[
-            { icon: '📅', label: EVENT.dateLabel,   sub: 'Fecha del evento' },
-            { icon: '📍', label: 'Punto de Partida', sub: EVENT.location },
+            { icon: '📅', label: EVENT.dateLabel,    sub: 'Fecha del evento'   },
+            { icon: '📍', label: 'Punto de Partida', sub: EVENT.location        },
             { icon: '🚵', label: '2 Categorías',     sub: 'Gravel Race & Paseo' },
           ].map((item, i) => (
             <div key={i} className="flex items-center">
-              {i > 0 && <div className="w-px h-12 bg-border mx-6 hidden sm:block" />}
-              <div className="flex flex-col items-center gap-1 px-4 py-2">
-                <span className="text-2xl">{item.icon}</span>
-                <strong className="text-sm text-white">{item.label}</strong>
-                <small className="text-[11px] text-muted-foreground">{item.sub}</small>
+              {i > 0 && (
+                <span className="text-primary/30 px-4 hidden sm:block text-xl select-none">·</span>
+              )}
+              <div className="flex items-center gap-2.5 px-4 py-2">
+                <span className="text-xl">{item.icon}</span>
+                <div className="text-left">
+                  <strong className="text-sm text-white block leading-snug">{item.label}</strong>
+                  <small className="text-[11px] text-muted-foreground block leading-snug">{item.sub}</small>
+                </div>
               </div>
             </div>
           ))}
@@ -122,32 +139,36 @@ export default function Hero() {
       </div>
 
       {/* Countdown bar */}
-      <div className="absolute bottom-0 left-0 right-0 bg-primary/10 backdrop-blur-md border-t border-primary/25 py-4 px-6 flex flex-wrap items-center justify-center gap-6 z-10">
+      <div className="absolute bottom-0 left-0 right-0 bg-[#05090505] backdrop-blur-md border-t border-primary/20 py-4 px-6 flex flex-wrap items-center justify-center gap-6 z-10">
         <p className="text-muted-foreground text-xs tracking-widest uppercase">Faltan para el arranque</p>
         <div className="flex items-center gap-2">
-          <CountdownBlock value={days}  label="Días" />
+          <CountdownBlock value={days}  label="Días"  />
           <Sep />
           <CountdownBlock value={hours} label="Horas" />
           <Sep />
-          <CountdownBlock value={mins}  label="Min" />
+          <CountdownBlock value={mins}  label="Min"   />
           <Sep />
-          <CountdownBlock value={secs}  label="Seg" />
+          <CountdownBlock value={secs}  label="Seg"   />
         </div>
       </div>
     </section>
   )
 }
 
+/* StatsRibbon: carved stone, not a flat green LED bar */
 export function StatsRibbon() {
   return (
-    <div className="flex flex-wrap justify-center bg-primary">
+    <div
+      className="flex flex-wrap justify-center border-y border-primary/18"
+      style={{ background: 'linear-gradient(135deg, #060e06 0%, #07120a 50%, #060e06 100%)' }}
+    >
       {STATS.map((s, i) => (
         <div
           key={i}
-          className="flex flex-col items-center flex-1 min-w-[140px] py-6 px-4 border-r border-white/20 last:border-r-0 gap-1"
+          className="flex flex-col items-center flex-1 min-w-[140px] py-7 px-4 border-r border-primary/12 last:border-r-0 gap-1.5"
         >
-          <strong className="font-title text-3xl text-white tracking-wide">{s.value}</strong>
-          <span className="text-xs text-white/80 font-medium">{s.label}</span>
+          <strong className="font-title text-3xl text-primary tracking-wide">{s.value}</strong>
+          <span className="text-[10px] text-muted-foreground font-medium uppercase tracking-[.22em]">{s.label}</span>
         </div>
       ))}
     </div>

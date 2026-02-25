@@ -12,6 +12,24 @@ import Sponsors from '@/components/sections/Sponsors'
 import Contact from '@/components/sections/Contact'
 import Footer from '@/components/sections/Footer'
 
+/* Subtle mountain ridgeline — visual rhythm between sections */
+function RidgeDivider() {
+  return (
+    <div className="w-full overflow-hidden pointer-events-none" style={{ height: '48px' }}>
+      <svg viewBox="0 0 1440 48" preserveAspectRatio="none" className="w-full h-full">
+        <path
+          d="M0,48 L0,22 L105,5 L225,28 L345,3 L475,24 L605,1 L725,18 L858,0 L985,16 L1105,3 L1245,26 L1365,7 L1440,18 L1440,48 Z"
+          fill="rgba(84,165,49,.055)"
+        />
+        <path
+          d="M0,48 L0,36 L185,17 L370,40 L545,13 L725,38 L905,11 L1085,34 L1265,14 L1440,33 L1440,48 Z"
+          fill="rgba(84,165,49,.032)"
+        />
+      </svg>
+    </div>
+  )
+}
+
 function BackToTop() {
   const scrollY = useScrollY()
   if (scrollY < 400) return null
@@ -33,13 +51,17 @@ export default function App() {
       <main>
         <Hero />
         <StatsRibbon />
+        <RidgeDivider />
         <About />
         <Categories />
+        <RidgeDivider />
         <Route />
         <Schedule />
+        <RidgeDivider />
         <Prizes />
         <Registration />
         <FAQ />
+        <RidgeDivider />
         <Sponsors />
         <Contact />
       </main>

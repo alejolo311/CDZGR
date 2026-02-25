@@ -42,29 +42,69 @@
     -webkit-font-smoothing: antialiased;
   }
 
+  /* Film grain — makes the screen feel physical, not like a glowing LED */
+  body::after {
+    content: '';
+    position: fixed;
+    inset: 0;
+    pointer-events: none;
+    z-index: 9998;
+    opacity: 0.042;
+    background-image: url("data:image/svg+xml,<svg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='0.8' numOctaves='4' stitchTiles='stitch'/></filter><rect width='100%25' height='100%25' filter='url(%23n)'/></svg>");
+    background-size: 256px;
+    background-repeat: repeat;
+  }
+
   ::-webkit-scrollbar       { width: 5px; }
   ::-webkit-scrollbar-track { background: hsl(120 10% 7%); }
   ::-webkit-scrollbar-thumb { background: hsl(var(--primary)); border-radius: 3px; }
 }
 
 @layer utilities {
+  /* Diagonal terrain / contour lines for the hero */
   .hero-grid {
     background-image:
       repeating-linear-gradient(
-        35deg,
+        38deg,
         transparent 0px,
-        transparent 55px,
-        rgba(84,165,49,.045) 55px,
-        rgba(84,165,49,.045) 56px
+        transparent 62px,
+        rgba(84,165,49,.042) 62px,
+        rgba(84,165,49,.042) 63px
       ),
       repeating-linear-gradient(
-        -35deg,
+        -38deg,
         transparent 0px,
-        transparent 80px,
-        rgba(46,140,200,.03) 80px,
-        rgba(46,140,200,.03) 81px
+        transparent 92px,
+        rgba(46,140,200,.026) 92px,
+        rgba(46,140,200,.026) 93px
       );
-    animation: gridMove 40s linear infinite;
+    animation: gridMove 45s linear infinite;
+  }
+
+  /*
+   * Topographic rings — two "hills" (green + blue) at opposite corners.
+   * Very subtle: looks like a topo map printed on dark paper.
+   */
+  .topo-bg {
+    background-image:
+      radial-gradient(ellipse 220px 130px at 12% 32%,
+        transparent 55%, rgba(84,165,49,.055) 56%,
+        rgba(84,165,49,.055) 57%, transparent 58%),
+      radial-gradient(ellipse 360px 210px at 12% 32%,
+        transparent 55%, rgba(84,165,49,.032) 56%,
+        rgba(84,165,49,.032) 57%, transparent 58%),
+      radial-gradient(ellipse 500px 295px at 12% 32%,
+        transparent 55%, rgba(84,165,49,.016) 56%,
+        rgba(84,165,49,.016) 57%, transparent 58%),
+      radial-gradient(ellipse 190px 110px at 82% 72%,
+        transparent 55%, rgba(46,140,200,.042) 56%,
+        rgba(46,140,200,.042) 57%, transparent 58%),
+      radial-gradient(ellipse 320px 185px at 82% 72%,
+        transparent 55%, rgba(46,140,200,.025) 56%,
+        rgba(46,140,200,.025) 57%, transparent 58%),
+      radial-gradient(ellipse 460px 265px at 82% 72%,
+        transparent 55%, rgba(46,140,200,.013) 56%,
+        rgba(46,140,200,.013) 57%, transparent 58%);
   }
 
   .font-title { font-family: 'Bebas Neue', sans-serif; }
