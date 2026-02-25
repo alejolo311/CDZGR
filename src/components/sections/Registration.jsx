@@ -92,9 +92,11 @@ export default function Registration() {
 
     try {
       // 1. Guardar en Supabase con estado pendiente antes de redirigir a MP
-      const { data, error: dbError } = await supabase
+      const inscripcionId = crypto.randomUUID()
+      const { error: dbError } = await supabase
         .from('inscripciones')
         .insert({
+          id:                inscripcionId,
           categoria:         form.categoria,
           subcategoria:      form.subcategoria  || null,
           talla:             form.talla,
@@ -117,8 +119,6 @@ export default function Registration() {
           precio_cop:        cat.priceNum,
           estado_pago:       'pendiente',
         })
-        .select('id')
-        .single()
 
       if (dbError) throw dbError
 
@@ -129,7 +129,7 @@ export default function Registration() {
         apellido:  form.apellido,
         email:     form.email,
         telefono:  form.telefono,
-        externalRef: data.id,
+        externalRef: inscripcionId,
       })
 
       // 3. Persistir datos para el email (la página se recarga al volver de MP)
