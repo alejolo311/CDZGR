@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
 import { Textarea } from '@/components/ui/textarea'
@@ -9,6 +9,7 @@ import { Dialog, DialogContent, DialogHeader, DialogTitle } from '@/components/u
 import { SectionHeader } from './About'
 import { CATEGORIES, MODAL_CONTENT } from '@/lib/constants'
 import { supabase } from '@/lib/supabase'
+import { createMPPreference } from '@/lib/mercadopago'
 
 const A  = '#c47818'
 const MP = '#009EE3'
@@ -46,10 +47,31 @@ function ModalContent({ type }) {
 
 export default function Registration() {
   const [step,     setStep]     = useState(0)
-  const [success,  setSuccess]  = useState(false)
+  const [success,  setSuccess]  = useState(null)   /* null | 'ok' | 'pendiente' | 'error' */
   const [isPaying, setIsPaying] = useState(false)
   const [payError, setPayError] = useState(null)
   const [modal,    setModal]    = useState(null)
+
+  /* Detecta el regreso desde MercadoPago (?inscripcion=ok/error/pendiente) */
+  useEffect(() => {
+    const params = new URLSearchParams(window.location.search)
+    const estado = params.get('inscripcion')
+    if (!estado) return
+
+    setSuccess(estado)
+    window.history.replaceState({}, '', window.location.pathname)
+
+    // Solo al confirmar pago exitoso enviamos el correo de confirmación
+    if (estado === 'ok') {
+      const raw = sessionStorage.getItem('cdzgr_pago')
+      if (raw) {
+        sessionStorage.removeItem('cdzgr_pago')
+        supabase.functions
+          .invoke('send-confirmation', { body: JSON.parse(raw) })
+          .catch(err => console.error('[Email confirmación]', err))
+      }
+    }
+  }, [])
 
   const [form, setForm] = useState({
     categoria: '', subcategoria: '', talla: '',
@@ -69,45 +91,67 @@ export default function Registration() {
     setPayError(null)
 
     try {
-      // Simular procesamiento de pago (1.5 s)
-      await new Promise(r => setTimeout(r, 1500))
+      // 1. Guardar en Supabase con estado pendiente antes de redirigir a MP
+      const { data, error: dbError } = await supabase
+        .from('inscripciones')
+        .insert({
+          categoria:         form.categoria,
+          subcategoria:      form.subcategoria  || null,
+          talla:             form.talla,
+          nombre:            form.nombre,
+          apellido:          form.apellido,
+          documento:         form.documento,
+          nacimiento:        form.nacimiento,
+          genero:            form.genero,
+          ciudad:            form.ciudad,
+          email:             form.email,
+          telefono:          form.telefono,
+          club:              form.club         || null,
+          rh:                form.rh,
+          eps:               form.eps,
+          alergias:          form.alergias     || null,
+          medicamentos:      form.medicamentos || null,
+          emergencia_nombre: form.emergenciaNombre,
+          emergencia_tel:    form.emergenciaTel,
+          emergencia_rel:    form.emergenciaRel,
+          precio_cop:        cat.priceNum,
+          estado_pago:       'pendiente',
+        })
+        .select('id')
+        .single()
 
-      // Guardar inscripción en Supabase
-      const { error } = await supabase.from('inscripciones').insert({
-        categoria:         form.categoria,
-        subcategoria:      form.subcategoria  || null,
-        talla:             form.talla,
-        nombre:            form.nombre,
-        apellido:          form.apellido,
-        documento:         form.documento,
-        nacimiento:        form.nacimiento,
-        genero:            form.genero,
-        ciudad:            form.ciudad,
-        email:             form.email,
-        telefono:          form.telefono,
-        club:              form.club         || null,
-        rh:                form.rh,
-        eps:               form.eps,
-        alergias:          form.alergias     || null,
-        medicamentos:      form.medicamentos || null,
-        emergencia_nombre: form.emergenciaNombre,
-        emergencia_tel:    form.emergenciaTel,
-        emergencia_rel:    form.emergenciaRel,
-        precio_cop:        cat.priceNum,
-        estado_pago:       'completado',
+      if (dbError) throw dbError
+
+      // 2. Crear preferencia en MercadoPago, pasando el ID de Supabase como referencia
+      const url = await createMPPreference({
+        categoria: form.categoria,
+        nombre:    form.nombre,
+        apellido:  form.apellido,
+        email:     form.email,
+        telefono:  form.telefono,
+        externalRef: data.id,
       })
 
-      if (error) throw error
+      // 3. Persistir datos para el email (la página se recarga al volver de MP)
+      sessionStorage.setItem('cdzgr_pago', JSON.stringify({
+        nombre:      form.nombre,
+        apellido:    form.apellido,
+        email:       form.email,
+        categoria:   form.categoria,
+        subcategoria: form.subcategoria || null,
+        precio_cop:  cat.priceNum,
+      }))
 
-      setSuccess(true)
+      // 4. Redirigir al checkout de MercadoPago
+      window.location.href = url
     } catch (err) {
       console.error('[Inscripción] Error:', err)
-      setPayError(err.message || 'Error al guardar la inscripción. Intenta de nuevo.')
+      setPayError(err.message || 'Error al iniciar el pago. Intenta de nuevo.')
       setIsPaying(false)
     }
   }
 
-  if (success) return <SuccessScreen nombre={form.nombre} cat={cat} />
+  if (success) return <SuccessScreen status={success} />
 
   return (
     <section id="inscripcion" className="py-24 bg-background">
@@ -422,21 +466,48 @@ export default function Registration() {
   )
 }
 
-/* ── Pantalla de éxito ───────────────────────────────────────────────────── */
-function SuccessScreen({ nombre, cat }) {
+/* ── Pantalla post-pago (MercadoPago redirige de vuelta con ?inscripcion=) ── */
+const STATUS_CONTENT = {
+  ok: {
+    emoji: '🎉',
+    title: '¡Pago Confirmado!',
+    body:  'Tu inscripción en Caídos del Zarzo 2026 está asegurada. Recibirás un correo con tu número de participante e instrucciones para el kit.',
+    share: true,
+  },
+  pendiente: {
+    emoji: '⏳',
+    title: 'Pago en Revisión',
+    body:  'MercadoPago está procesando tu pago. Te notificaremos por correo cuando se confirme (puede tardar hasta 24 h). Tu inscripción ya está registrada.',
+    share: false,
+  },
+  error: {
+    emoji: '❌',
+    title: 'Pago no completado',
+    body:  'El pago fue rechazado o cancelado. Puedes intentarlo nuevamente — tu formulario no se perdió.',
+    share: false,
+    retry: true,
+  },
+}
+
+function SuccessScreen({ status }) {
+  const c = STATUS_CONTENT[status] ?? STATUS_CONTENT.ok
   return (
     <section id="inscripcion" className="py-24 bg-background">
       <div className="max-w-2xl mx-auto px-6 text-center">
-        <div className="text-7xl mb-6 animate-bounce-up">🎉</div>
-        <h3 className="font-title text-5xl text-foreground tracking-wide mb-4">¡Inscripción Confirmada!</h3>
-        <p className="text-muted-foreground mb-3 leading-relaxed">
-          ¡Bienvenido/a, <strong className="text-foreground">{nombre}</strong>! Tu lugar en{' '}
-          <strong className="text-foreground">Caídos del Zarzo 2026</strong> está asegurado.
-        </p>
-        <p className="text-muted-foreground mb-10 leading-relaxed">
-          Recibirás un correo de confirmación con tu número de participante e instrucciones para el kit de corredor.
-        </p>
+        <div className="text-7xl mb-6 animate-bounce-up">{c.emoji}</div>
+        <h3 className="font-title text-5xl text-foreground tracking-wide mb-4">{c.title}</h3>
+        <p className="text-muted-foreground mb-10 leading-relaxed max-w-md mx-auto">{c.body}</p>
+
         <div className="flex flex-wrap gap-4 justify-center mb-8">
+          {c.retry && (
+            <button
+              className="px-8 py-3 font-bold text-sm text-white"
+              style={{ background: '#009EE3' }}
+              onClick={() => window.location.reload()}
+            >
+              Intentar de nuevo
+            </button>
+          )}
           <button
             className="px-8 py-3 font-bold text-sm border border-border text-foreground hover:border-foreground transition-colors"
             onClick={() => document.querySelector('#sobre')?.scrollIntoView({ behavior: 'smooth' })}
@@ -444,19 +515,24 @@ function SuccessScreen({ nombre, cat }) {
             Explorar la Ruta
           </button>
         </div>
-        <p className="text-muted-foreground text-sm mb-3">¡Comparte tu inscripción!</p>
-        <div className="flex gap-3 justify-center">
-          <a href={`https://wa.me/?text=¡Me inscribí en Caídos del Zarzo Gravel Race 2026! 🚵 %23CaidosDelZarzo2026`}
-            target="_blank" rel="noreferrer"
-            className="bg-[#25d366] text-white font-bold py-2.5 px-6 text-sm hover:opacity-90 transition-opacity">
-            WhatsApp
-          </a>
-          <a href="https://instagram.com" target="_blank" rel="noreferrer"
-            className="text-white font-bold py-2.5 px-6 text-sm hover:opacity-90 transition-opacity"
-            style={{ background: 'linear-gradient(45deg, #f09433, #dc2743, #bc1888)' }}>
-            Instagram
-          </a>
-        </div>
+
+        {c.share && (
+          <>
+            <p className="text-muted-foreground text-sm mb-3">¡Comparte tu inscripción!</p>
+            <div className="flex gap-3 justify-center">
+              <a href="https://wa.me/?text=¡Me inscribí en Caídos del Zarzo Gravel Race 2026! 🚵 %23CaidosDelZarzo2026"
+                target="_blank" rel="noreferrer"
+                className="bg-[#25d366] text-white font-bold py-2.5 px-6 text-sm hover:opacity-90 transition-opacity">
+                WhatsApp
+              </a>
+              <a href="https://instagram.com" target="_blank" rel="noreferrer"
+                className="text-white font-bold py-2.5 px-6 text-sm hover:opacity-90 transition-opacity"
+                style={{ background: 'linear-gradient(45deg, #f09433, #dc2743, #bc1888)' }}>
+                Instagram
+              </a>
+            </div>
+          </>
+        )}
       </div>
     </section>
   )

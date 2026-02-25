@@ -22,7 +22,7 @@ const TITLES = {
   paseo:  'El Paseo – Caídos del Zarzo 2026',
 }
 
-export async function createMPPreference({ categoria, nombre, apellido, email, telefono }) {
+export async function createMPPreference({ categoria, nombre, apellido, email, telefono, externalRef }) {
   if (!ACCESS_TOKEN) {
     throw new Error('Credenciales de pago no configuradas. Contacta al organizador.')
   }
@@ -50,7 +50,7 @@ export async function createMPPreference({ categoria, nombre, apellido, email, t
     },
     auto_return:          'approved',
     statement_descriptor: 'CAIDOS DEL ZARZO',
-    external_reference:   `${categoria}-${Date.now()}`,
+    external_reference:   externalRef || `${categoria}-${Date.now()}`,
   }
 
   const res = await fetch('https://api.mercadopago.com/checkout/preferences', {
