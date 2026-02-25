@@ -1,7 +1,6 @@
 import { useState } from 'react'
 import { Menu, X } from 'lucide-react'
 import { useScrollY } from '@/hooks/useScrollY'
-import { cn } from '@/lib/utils'
 
 const NAV_LINKS = [
   { href: '#sobre',       label: 'La Carrera' },
@@ -18,10 +17,23 @@ function scrollTo(href, cb) {
   if (el) el.scrollIntoView({ behavior: 'smooth', block: 'start' })
 }
 
+/* Mountain SVG — same geometry as favicon */
+function MtnLogo({ size = 28, scrolled }) {
+  const bg    = scrolled ? '#1a1208' : 'rgba(240,232,216,0.08)'
+  const amber = '#c47818'
+  const snow  = scrolled ? '#f0e8d8' : 'rgba(240,232,216,0.85)'
+  return (
+    <svg width={size} height={size} viewBox="0 0 64 64" fill="none" aria-hidden="true">
+      <circle cx="32" cy="32" r="32" fill={bg} />
+      <polygon points="32,12 10,46 54,46" fill={amber} />
+      <polygon points="32,12 25,26 39,26" fill={snow} />
+    </svg>
+  )
+}
+
 export default function Navbar() {
   const [open, setOpen] = useState(false)
-  const scrollY = useScrollY()
-  const scrolled = scrollY > 60
+  const scrolled = useScrollY() > 60
 
   return (
     <nav
@@ -37,9 +49,10 @@ export default function Navbar() {
         <a
           href="#hero"
           onClick={e => { e.preventDefault(); scrollTo('#hero') }}
-          className="font-title text-xl tracking-widest transition-colors"
+          className="flex items-center gap-2 font-title text-xl tracking-widest transition-colors"
           style={{ color: scrolled ? '#170e05' : '#f0e8d8' }}
         >
+          <MtnLogo size={28} scrolled={scrolled} />
           CAÍDOS <span style={{ color: '#c47818' }}>DEL ZARZO</span>
         </a>
 
@@ -91,6 +104,12 @@ export default function Navbar() {
           <button className="absolute top-4 right-5 p-2" style={{ color: '#f0e8d8' }} onClick={() => setOpen(false)}>
             <X className="w-6 h-6" />
           </button>
+
+          {/* Logo in mobile drawer */}
+          <div className="flex items-center gap-3 mb-4">
+            <MtnLogo size={44} scrolled={true} />
+          </div>
+
           {NAV_LINKS.map(({ href, label }) => (
             <button
               key={href}
