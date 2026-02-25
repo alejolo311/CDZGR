@@ -5,16 +5,25 @@ import { EVENT, STATS } from '@/lib/constants'
 function CountdownBlock({ value, label }) {
   return (
     <div className="flex flex-col items-center min-w-[52px]">
-      <span className="font-title text-4xl text-primary leading-none">
+      <span
+        className="font-title text-4xl leading-none"
+        style={{ color: '#c47818' }}
+      >
         {String(value).padStart(2, '0')}
       </span>
-      <small className="text-[10px] uppercase tracking-widest text-muted-foreground mt-1">{label}</small>
+      <small className="text-[10px] uppercase tracking-widest mt-1" style={{ color: 'rgba(240,232,216,0.55)' }}>
+        {label}
+      </small>
     </div>
   )
 }
 
 function Sep() {
-  return <span className="font-title text-3xl text-primary/50 animate-blink pb-1">:</span>
+  return (
+    <span className="font-title text-2xl pb-1 animate-blink" style={{ color: 'rgba(196,120,24,0.5)' }}>
+      :
+    </span>
+  )
 }
 
 export default function Hero() {
@@ -28,120 +37,118 @@ export default function Hero() {
   return (
     <section
       id="hero"
-      className="relative min-h-screen flex flex-col items-center justify-center overflow-hidden"
-      style={{
-        background: `
-          radial-gradient(ellipse at 15% 55%, rgba(84,165,49,.2) 0%, transparent 52%),
-          radial-gradient(ellipse at 85% 15%, rgba(46,140,200,.16) 0%, transparent 48%),
-          radial-gradient(ellipse at 50% 100%, rgba(84,165,49,.12) 0%, transparent 38%),
-          linear-gradient(160deg, #060d06 0%, #0a150a 40%, #07101a 100%)
-        `,
-      }}
+      className="relative min-h-screen flex flex-col items-center justify-center overflow-hidden grain"
+      style={{ background: 'linear-gradient(175deg, #1a1208 0%, #16100a 55%, #1c1510 100%)' }}
     >
-      {/* Diagonal terrain contour lines */}
-      <div className="absolute inset-0 hero-grid pointer-events-none" />
-
-      {/* Radial depth vignette */}
+      {/* Faint warm vignette — depth without glow */}
       <div
         className="absolute inset-0 pointer-events-none"
-        style={{ background: 'radial-gradient(ellipse at center, transparent 30%, rgba(5,9,5,.80) 100%)' }}
+        style={{ background: 'radial-gradient(ellipse at center, transparent 40%, rgba(10,6,2,0.65) 100%)' }}
       />
-
-      {/* Mountain silhouette layers — far to near */}
-      <div className="absolute bottom-0 left-0 right-0 pointer-events-none" style={{ zIndex: 2 }}>
-        <svg viewBox="0 0 1440 320" preserveAspectRatio="none" className="w-full" style={{ height: '320px', display: 'block' }}>
-          {/* Far ridge — blue-dark atmosphere haze */}
-          <path
-            d="M0,320 L0,215 L55,188 L120,202 L195,160 L265,178 L335,135 L405,158 L475,112 L548,140 L620,96 L692,122 L762,80 L835,108 L908,68 L975,98 L1042,78 L1112,108 L1182,88 L1252,115 L1322,93 L1382,110 L1440,98 L1440,320 Z"
-            fill="rgba(8,14,24,0.52)"
-          />
-          {/* Mid mountains — deep forest */}
-          <path
-            d="M0,320 L0,250 L85,218 L175,235 L258,195 L345,215 L428,172 L512,198 L594,155 L675,182 L752,150 L832,175 L912,140 L992,165 L1072,185 L1152,160 L1232,182 L1312,162 L1392,196 L1440,178 L1440,320 Z"
-            fill="rgba(7,14,7,0.74)"
-          />
-          {/* Near dark slope with mist at base */}
-          <path
-            d="M0,320 L0,278 L175,262 L355,270 L478,252 L598,267 L718,256 L848,272 L1002,258 L1162,268 L1305,256 L1440,266 L1440,320 Z"
-            fill="rgba(5,9,5,0.90)"
-          />
-          {/* Mist / ground fog layer */}
-          <path
-            d="M0,320 L0,305 L360,298 L720,302 L1080,298 L1440,303 L1440,320 Z"
-            fill="rgba(84,165,49,0.04)"
-          />
-        </svg>
-      </div>
 
       {/* Content */}
       <div className="relative z-10 text-center px-6 pt-28 pb-52 max-w-4xl mx-auto">
 
-        {/* Label: horizontal rule style, not a tech pill */}
-        <div className="flex items-center justify-center gap-3 mb-6 animate-fade-up">
-          <div className="h-px w-14 bg-gradient-to-r from-transparent to-primary/70" />
-          <p className="text-primary text-[10px] font-bold tracking-[.32em] uppercase whitespace-nowrap">
+        {/* Edition label */}
+        <div className="flex items-center justify-center gap-4 mb-8 animate-fade-up">
+          <div className="h-px w-16" style={{ background: 'rgba(196,120,24,0.5)' }} />
+          <p
+            className="text-[10px] font-bold tracking-[.35em] uppercase whitespace-nowrap"
+            style={{ color: '#c47818' }}
+          >
             Edición {EVENT.year} · Gravel Race
           </p>
-          <div className="h-px w-14 bg-gradient-to-l from-transparent to-primary/70" />
+          <div className="h-px w-16" style={{ background: 'rgba(196,120,24,0.5)' }} />
         </div>
 
+        {/* Main title */}
         <h1
-          className="font-title leading-none text-white mb-6 animate-fade-up"
-          style={{ fontSize: 'clamp(4rem, 14vw, 11rem)', animationDelay: '100ms' }}
+          className="font-title leading-none mb-6 animate-fade-up"
+          style={{
+            fontSize: 'clamp(4.5rem, 14vw, 11rem)',
+            color: '#f0e8d8',
+            animationDelay: '80ms',
+            letterSpacing: '0.02em',
+          }}
         >
           CAÍDOS<br />
-          <span className="text-primary">DEL ZARZO</span>
+          <span style={{ color: '#c47818' }}>DEL ZARZO</span>
         </h1>
 
+        {/* Tagline */}
         <p
-          className="text-white/60 mb-10 animate-fade-up"
-          style={{ fontSize: 'clamp(1rem, 2.5vw, 1.35rem)', animationDelay: '200ms' }}
+          className="mb-10 animate-fade-up"
+          style={{
+            fontSize: 'clamp(1rem, 2.2vw, 1.25rem)',
+            color: 'rgba(240,232,216,0.6)',
+            animationDelay: '160ms',
+          }}
         >
           Polvo, adrenalina y gloria entre montañas.
         </p>
 
-        {/* Meta info — organic flow, no "app box" */}
+        {/* Meta info — no boxes, just text */}
         <div
-          className="flex flex-wrap items-center justify-center mb-10 animate-fade-up"
-          style={{ animationDelay: '300ms' }}
+          className="flex flex-wrap items-start justify-center gap-x-8 gap-y-4 mb-12 animate-fade-up"
+          style={{ animationDelay: '240ms' }}
         >
           {[
-            { icon: '📅', label: EVENT.dateLabel,    sub: 'Fecha del evento'   },
-            { icon: '📍', label: 'Punto de Partida', sub: EVENT.location        },
-            { icon: '🚵', label: '2 Categorías',     sub: 'Gravel Race & Paseo' },
+            { label: EVENT.dateLabel,    sub: 'Fecha del evento'   },
+            { label: 'Punto de Partida', sub: EVENT.location        },
+            { label: '2 Categorías',     sub: 'Gravel Race & Paseo' },
           ].map((item, i) => (
-            <div key={i} className="flex items-center">
-              {i > 0 && (
-                <span className="text-primary/30 px-4 hidden sm:block text-xl select-none">·</span>
-              )}
-              <div className="flex items-center gap-2.5 px-4 py-2">
-                <span className="text-xl">{item.icon}</span>
-                <div className="text-left">
-                  <strong className="text-sm text-white block leading-snug">{item.label}</strong>
-                  <small className="text-[11px] text-muted-foreground block leading-snug">{item.sub}</small>
-                </div>
-              </div>
+            <div key={i} className="text-center">
+              <strong className="block text-sm font-bold" style={{ color: '#f0e8d8' }}>
+                {item.label}
+              </strong>
+              <small className="block text-[11px]" style={{ color: 'rgba(240,232,216,0.45)' }}>
+                {item.sub}
+              </small>
             </div>
           ))}
         </div>
 
         {/* CTAs */}
-        <div className="flex flex-wrap gap-4 justify-center animate-fade-up" style={{ animationDelay: '400ms' }}>
-          <Button size="lg" onClick={() => scrollTo('#inscripcion')}>Inscríbete Ahora</Button>
-          <Button size="lg" variant="outline" onClick={() => scrollTo('#sobre')}>Conoce la Ruta</Button>
+        <div
+          className="flex flex-wrap gap-4 justify-center animate-fade-up"
+          style={{ animationDelay: '320ms' }}
+        >
+          <Button size="lg" onClick={() => scrollTo('#inscripcion')}>
+            Inscríbete Ahora
+          </Button>
+          <Button size="lg" variant="outline" onClick={() => scrollTo('#sobre')}>
+            Conoce la Ruta
+          </Button>
         </div>
       </div>
 
       {/* Scroll indicator */}
-      <div className="absolute bottom-44 left-1/2 -translate-x-1/2 flex flex-col items-center gap-2 text-muted-foreground text-[11px] tracking-widest uppercase z-10">
+      <div
+        className="absolute bottom-44 left-1/2 -translate-x-1/2 flex flex-col items-center gap-2 text-[10px] tracking-widest uppercase z-10"
+        style={{ color: 'rgba(240,232,216,0.35)' }}
+      >
         <span>Desplaza</span>
-        <div className="w-px h-10 bg-gradient-to-b from-primary to-transparent animate-scroll-pulse" />
+        <div
+          className="w-px h-10 animate-scroll-pulse"
+          style={{ background: 'linear-gradient(to bottom, #c47818, transparent)' }}
+        />
       </div>
 
-      {/* Countdown bar */}
-      <div className="absolute bottom-0 left-0 right-0 bg-[#05090505] backdrop-blur-md border-t border-primary/20 py-4 px-6 flex flex-wrap items-center justify-center gap-6 z-10">
-        <p className="text-muted-foreground text-xs tracking-widest uppercase">Faltan para el arranque</p>
-        <div className="flex items-center gap-2">
+      {/* Countdown — simple bar at bottom */}
+      <div
+        className="absolute bottom-0 left-0 right-0 py-4 px-6 flex flex-wrap items-center justify-center gap-6 z-10 border-t"
+        style={{
+          background: 'rgba(22,16,10,0.92)',
+          borderColor: 'rgba(196,120,24,0.18)',
+        }}
+      >
+        <p
+          className="text-[10px] tracking-widest uppercase"
+          style={{ color: 'rgba(240,232,216,0.45)' }}
+        >
+          Faltan para el arranque
+        </p>
+        <div className="flex items-center gap-3">
           <CountdownBlock value={days}  label="Días"  />
           <Sep />
           <CountdownBlock value={hours} label="Horas" />
@@ -155,20 +162,29 @@ export default function Hero() {
   )
 }
 
-/* StatsRibbon: carved stone, not a flat green LED bar */
+/* Stats ribbon — warm amber stripe, like a race highlight */
 export function StatsRibbon() {
   return (
     <div
-      className="flex flex-wrap justify-center border-y border-primary/18"
-      style={{ background: 'linear-gradient(135deg, #060e06 0%, #07120a 50%, #060e06 100%)' }}
+      className="flex flex-wrap justify-center border-y"
+      style={{
+        background: '#c47818',
+        borderColor: '#8f5510',
+      }}
     >
       {STATS.map((s, i) => (
         <div
           key={i}
-          className="flex flex-col items-center flex-1 min-w-[140px] py-7 px-4 border-r border-primary/12 last:border-r-0 gap-1.5"
+          className="flex flex-col items-center flex-1 min-w-[140px] py-6 px-4 gap-0.5"
+          style={{ borderRight: i < STATS.length - 1 ? '1px solid rgba(143,85,16,0.4)' : 'none' }}
         >
-          <strong className="font-title text-3xl text-primary tracking-wide">{s.value}</strong>
-          <span className="text-[10px] text-muted-foreground font-medium uppercase tracking-[.22em]">{s.label}</span>
+          <strong className="font-title text-3xl tracking-wide text-white">{s.value}</strong>
+          <span
+            className="text-[10px] font-semibold uppercase tracking-[.2em]"
+            style={{ color: 'rgba(255,255,255,0.72)' }}
+          >
+            {s.label}
+          </span>
         </div>
       ))}
     </div>

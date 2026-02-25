@@ -7,7 +7,7 @@ function TimelineItem({ item }) {
   return (
     <div className={cn(
       'flex gap-7 py-6 border-b border-border last:border-0',
-      item.highlight && 'bg-primary/6 rounded-xl px-4 border border-primary/20 my-1'
+      item.highlight && 'bg-primary/6 rounded-sm px-4 border border-primary/20 my-1'
     )}>
       <span className="font-title text-lg text-primary min-w-[90px] pt-0.5 tracking-wide">{item.time}</span>
       <div>

@@ -1,5 +1,5 @@
 import { useState } from 'react'
-import { Menu, X, Mountain } from 'lucide-react'
+import { Menu, X } from 'lucide-react'
 import { Button } from '@/components/ui/button'
 import { useScrollY } from '@/hooks/useScrollY'
 import { cn } from '@/lib/utils'
@@ -29,19 +29,26 @@ export default function Navbar() {
       className={cn(
         'fixed top-0 left-0 right-0 z-50 transition-all duration-300',
         scrolled
-          ? 'bg-[#060d06]/96 backdrop-blur-md border-b border-primary/12 shadow-[0_2px_24px_rgba(0,0,0,.55)] py-3'
+          ? 'py-3 border-b shadow-md'
           : 'py-5'
       )}
+      style={scrolled
+        ? { background: 'rgba(242,234,216,0.97)', borderColor: 'hsl(34 20% 78%)' }
+        : { background: 'transparent' }
+      }
     >
       <div className="max-w-6xl mx-auto px-6 flex items-center justify-between gap-6">
         {/* Logo */}
         <a
           href="#hero"
           onClick={(e) => { e.preventDefault(); scrollTo('#hero') }}
-          className="flex items-center gap-2.5 font-title text-2xl tracking-widest text-white hover:text-primary transition-colors"
+          className={cn(
+            'font-title text-2xl tracking-widest transition-colors',
+            scrolled ? 'text-foreground' : 'text-white'
+          )}
         >
-          <Mountain className="text-primary w-6 h-6" strokeWidth={1.5} />
-          CAÍDOS <span className="text-primary">DEL ZARZO</span>
+          CAÍDOS{' '}
+          <span style={{ color: '#c47818' }}>DEL ZARZO</span>
         </a>
 
         {/* Desktop links */}
@@ -50,7 +57,10 @@ export default function Navbar() {
             <li key={href}>
               <button
                 onClick={() => scrollTo(href)}
-                className="text-white/75 text-sm font-medium px-3 py-2 rounded-lg hover:bg-white/8 hover:text-white transition-all"
+                className={cn(
+                  'text-sm font-medium px-3 py-2 transition-colors rounded-sm hover:bg-black/6',
+                  scrolled ? 'text-foreground/80 hover:text-foreground' : 'text-white/80 hover:text-white'
+                )}
               >
                 {label}
               </button>
@@ -65,7 +75,7 @@ export default function Navbar() {
 
         {/* Mobile hamburger */}
         <button
-          className="lg:hidden p-2 text-white"
+          className={cn('lg:hidden p-2', scrolled ? 'text-foreground' : 'text-white')}
           onClick={() => setOpen(!open)}
           aria-label="Menú"
         >
@@ -75,12 +85,15 @@ export default function Navbar() {
 
       {/* Mobile menu */}
       {open && (
-        <div className="lg:hidden fixed inset-0 bg-[#060d06]/98 backdrop-blur-lg flex flex-col items-center justify-center gap-4 z-40">
+        <div
+          className="lg:hidden fixed inset-0 flex flex-col items-center justify-center gap-4 z-40"
+          style={{ background: 'rgba(242,234,216,0.98)' }}
+        >
           {NAV_LINKS.map(({ href, label }) => (
             <button
               key={href}
               onClick={() => scrollTo(href)}
-              className="text-white text-2xl font-semibold py-3 hover:text-primary transition-colors"
+              className="text-foreground text-2xl font-semibold py-3 hover:text-primary transition-colors"
             >
               {label}
             </button>

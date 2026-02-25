@@ -43,8 +43,12 @@ export default {
           DEFAULT:    'hsl(var(--card))',
           foreground: 'hsl(var(--card-foreground))',
         },
-        orange: { DEFAULT: '#54a531', dark: '#2e6818' },
-        emerald: { race: '#2e8cc8', 'race-dark': '#1a5a8a' },
+        /* amber/ochre — the color of dirt roads and dried grass */
+        orange: { DEFAULT: '#c47818', dark: '#8f5510' },
+        /* slate blue — used for Paseo/secondary route */
+        emerald: { race: '#4a7aaa', 'race-dark': '#2e5a88' },
+        /* warm darks for hero/footer sections */
+        earth: { dark: '#16100a', mid: '#221a0e' },
       },
       fontFamily: {
         title: ['"Bebas Neue"', 'sans-serif'],

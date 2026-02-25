@@ -8,7 +8,7 @@ export default function FAQ() {
   const right = FAQ_ITEMS.slice(half)
 
   return (
-    <section id="faq" className="py-24 topo-bg">
+    <section id="faq" className="py-24 bg-background">
       <div className="max-w-6xl mx-auto px-6">
         <SectionHeader tag="Preguntas Frecuentes" title="Tienes Dudas, Las Resolvemos" desc="Todo lo que necesitas saber antes de inscribirte." />
 
