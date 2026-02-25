@@ -4,7 +4,13 @@ import { EVENT, STATS } from '@/lib/constants'
 const D  = '#f0e8d8'
 const M  = 'rgba(240,232,216,.52)'
 const A  = '#c47818'
-const BG = '#1a1208'
+const BG = '#1a1208'   /* fallback while video loads */
+
+const YT_SRC =
+  'https://www.youtube.com/embed/YB4uTprpz7g' +
+  '?autoplay=1&mute=1&loop=1&playlist=YB4uTprpz7g' +
+  '&controls=0&showinfo=0&rel=0&modestbranding=1' +
+  '&playsinline=1&iv_load_policy=3&disablekb=1'
 
 function Num({ value, label }) {
   return (
@@ -30,28 +36,71 @@ export default function Hero() {
   return (
     <section
       id="hero"
-      className="relative min-h-screen flex flex-col items-center justify-center"
+      className="relative min-h-screen flex flex-col items-center justify-center overflow-hidden"
       style={{ background: BG }}
     >
-      {/* Subtle depth vignette */}
+      {/* ── YouTube background ──────────────────────────────────────────── */}
+      <div className="absolute inset-0 pointer-events-none" style={{ zIndex: 0 }}>
+        {/*
+          Technique: the wrapper always overflows so the 16:9 iframe
+          fills the section regardless of viewport shape.
+          minWidth: 177.78vh covers portrait viewports (16/9 * 100vh)
+          minHeight: 56.25vw covers landscape viewports (9/16 * 100vw)
+        */}
+        <div
+          style={{
+            position: 'absolute',
+            top: '50%', left: '50%',
+            width: '100vw',
+            height: '56.25vw',
+            minHeight: '100vh',
+            minWidth: '177.78vh',
+            transform: 'translate(-50%, -50%)',
+          }}
+        >
+          <iframe
+            src={YT_SRC}
+            title="Background video"
+            allow="autoplay; fullscreen"
+            style={{ width: '100%', height: '100%', border: 'none', display: 'block' }}
+          />
+        </div>
+      </div>
+
+      {/* ── Overlay 1: warm base darkening (lets video breathe) ─────────── */}
       <div
         className="absolute inset-0 pointer-events-none"
-        style={{ background: 'radial-gradient(ellipse 80% 60% at 50% 50%, transparent 45%, rgba(10,7,2,.55) 100%)' }}
+        style={{
+          zIndex: 1,
+          background: 'rgba(8, 3, 0, 0.48)',
+        }}
+      />
+
+      {/* ── Overlay 2: radial vignette (edges + bottom heavier) ─────────── */}
+      <div
+        className="absolute inset-0 pointer-events-none"
+        style={{
+          zIndex: 2,
+          background: [
+            'radial-gradient(ellipse 90% 65% at 50% 42%, transparent 30%, rgba(6,2,0,.62) 100%)',
+            'linear-gradient(to bottom, rgba(6,2,0,.18) 0%, transparent 25%, transparent 55%, rgba(6,2,0,.72) 100%)',
+          ].join(', '),
+        }}
       />
 
       {/* ── Content ──────────────────────────────────────────────────────── */}
-      <div className="relative z-10 text-center px-6 pt-20 pb-44 max-w-3xl mx-auto w-full">
+      <div className="relative text-center px-6 pt-20 pb-44 max-w-3xl mx-auto w-full" style={{ zIndex: 10 }}>
 
         {/* Kicker line */}
         <div className="flex items-center justify-center gap-4 mb-7 animate-fade-up">
-          <div className="h-px w-10" style={{ background: `rgba(196,120,24,.4)` }} />
+          <div className="h-px w-10" style={{ background: 'rgba(196,120,24,.4)' }} />
           <p className="text-[10px] font-bold tracking-[.45em] uppercase" style={{ color: A }}>
             Edición {EVENT.year} · Gravel Race
           </p>
-          <div className="h-px w-10" style={{ background: `rgba(196,120,24,.4)` }} />
+          <div className="h-px w-10" style={{ background: 'rgba(196,120,24,.4)' }} />
         </div>
 
-        {/* Title — scaled down, proportionate */}
+        {/* Title */}
         <h1
           className="font-title leading-[0.9] animate-fade-up"
           style={{
@@ -113,8 +162,14 @@ export default function Hero() {
 
       {/* ── Countdown strip ──────────────────────────────────────────────── */}
       <div
-        className="absolute bottom-0 left-0 right-0 py-4 px-6 flex flex-wrap items-center justify-center gap-8 z-10"
-        style={{ borderTop: `1px solid rgba(196,120,24,.18)`, background: 'rgba(14,8,2,.88)' }}
+        className="absolute bottom-0 left-0 right-0 py-4 px-6 flex flex-wrap items-center justify-center gap-8"
+        style={{
+          zIndex: 10,
+          borderTop: '1px solid rgba(196,120,24,.22)',
+          background: 'rgba(10,4,0,.88)',
+          backdropFilter: 'blur(6px)',
+          WebkitBackdropFilter: 'blur(6px)',
+        }}
       >
         <span className="text-[10px] tracking-[.3em] uppercase" style={{ color: M }}>
           Faltan para el arranque
