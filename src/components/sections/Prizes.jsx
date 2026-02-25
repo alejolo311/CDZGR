@@ -11,7 +11,7 @@ const TIER_STYLES = {
 
 export default function Prizes() {
   return (
-    <section id="premios" className="py-24 topo-bg">
+    <section id="premios" className="py-24 bg-background">
       <div className="max-w-6xl mx-auto px-6">
         <SectionHeader tag="Reconocimientos" title="Premios & Trofeos" desc="La gloria tiene recompensa. Aquí está el botín." />
 

@@ -33,7 +33,7 @@ function CategoryCard({ cat, isGravel }) {
         {/* Specs grid */}
         <div className="grid grid-cols-2 gap-3">
           {cat.specs.map((s) => (
-            <div key={s.label} className="bg-white/4 rounded-xl px-4 py-3 flex flex-col gap-1">
+            <div key={s.label} className="bg-muted/60 rounded-sm px-4 py-3 flex flex-col gap-1">
               <span className="text-[10px] uppercase tracking-widest text-muted-foreground">{s.label}</span>
               <strong className={`text-sm ${accentColor}`}>{s.value}</strong>
             </div>

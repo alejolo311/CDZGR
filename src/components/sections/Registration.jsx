@@ -106,7 +106,7 @@ export default function Registration() {
                       <span className="text-muted-foreground">Seguro de acc.</span>
                       <span className="text-emerald-race">Incluido</span>
                     </div>
-                    <div className="bg-emerald-race/10 border border-emerald-race/30 rounded-xl p-3">
+                    <div className="bg-emerald-race/10 border border-emerald-race/30 rounded-sm p-3">
                       <p className="text-emerald-race text-xs font-semibold">🐦 Precio Early Bird activo hasta el 30 de Abril</p>
                     </div>
                   </>
@@ -166,7 +166,7 @@ export default function Registration() {
                       className="grid sm:grid-cols-2 gap-4">
                       {Object.values(CATEGORIES).map((c) => (
                         <label key={c.id} htmlFor={`cat-${c.id}`}
-                          className={cn('cursor-pointer border-2 rounded-xl p-5 flex items-center gap-4 transition-all',
+                          className={cn('cursor-pointer border-2 rounded-sm p-5 flex items-center gap-4 transition-all',
                             form.categoria === c.id ? 'border-primary bg-primary/8' : 'border-border hover:border-border/60')}>
                           <RadioGroupItem value={c.id} id={`cat-${c.id}`} />
                           <span className="text-4xl">{c.icon}</span>
@@ -275,7 +275,7 @@ export default function Registration() {
                     <h3 className="font-title text-2xl text-white tracking-wide">Método de Pago</h3>
 
                     {cat && (
-                      <div className="bg-white/4 border border-border rounded-xl p-4 flex justify-between items-center">
+                      <div className="bg-muted/40 border border-border rounded-sm p-4 flex justify-between items-center">
                         <div>
                           <strong className="text-white block">{cat.name}</strong>
                           <span className="text-muted-foreground text-xs">{form.nombre} {form.apellido} · {form.email}</span>
@@ -291,7 +291,7 @@ export default function Registration() {
                         { v: 'efectivo', label: 'Efectivo', sub: 'Puntos autorizados' },
                       ].map((p) => (
                         <label key={p.v} htmlFor={`pm-${p.v}`}
-                          className={cn('cursor-pointer border-2 rounded-xl p-4 text-center transition-all',
+                          className={cn('cursor-pointer border-2 rounded-sm p-4 text-center transition-all',
                             form.pago === p.v ? 'border-primary bg-primary/8' : 'border-border')}>
                           <RadioGroupItem value={p.v} id={`pm-${p.v}`} className="sr-only" />
                           <strong className="text-white text-sm block">{p.label}</strong>
@@ -301,7 +301,7 @@ export default function Registration() {
                     </RadioGroup>
 
                     {pi && (
-                      <div className="bg-white/4 border border-border rounded-xl p-5 space-y-2">
+                      <div className="bg-muted/40 border border-border rounded-sm p-5 space-y-2">
                         <h5 className="text-white font-semibold text-sm">{pi.title}</h5>
                         <p className="text-muted-foreground text-sm leading-relaxed whitespace-pre-line"
                           dangerouslySetInnerHTML={{ __html: pi.body.replace(/\*\*(.+?)\*\*/g, '<strong class="text-white">$1</strong>') }} />
