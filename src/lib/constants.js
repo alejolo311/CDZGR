@@ -20,7 +20,7 @@ export const STATS = [
   { value: '3 500 m',  label: 'Desnivel + Gravel' },
   { value: '50 km',    label: 'Distancia Paseo' },
   { value: '1 200 m',  label: 'Desnivel + Paseo' },
-  { value: '500+',     label: 'Cupos Totales' },
+  { value: '2',        label: 'Modalidades' },
   { value: '8 h',      label: 'Tiempo máx. Gravel' },
 ]
 
@@ -51,14 +51,14 @@ export const CATEGORIES = {
     icon:       '🏆',
     name:       'Gravel Race',
     subtitle:   'Para los que no conocen el límite',
-    price:      '$120.000 COP',
+    price:      '$899.000 COP',
+    priceNum:   899000,
     difficulty: 5,
     specs: [
       { label: 'Distancia',   value: '100 km' },
       { label: 'Desnivel +',  value: '3 500 m' },
       { label: 'Tiempo máx.', value: '8 horas' },
-      { label: 'Cupos',       value: '300 participantes' },
-      { label: 'Inscripción', value: '$120.000 COP' },
+      { label: 'Inscripción', value: '$899.000 COP' },
     ],
     kit: [
       'Número y chip de cronometraje',
@@ -79,14 +79,14 @@ export const CATEGORIES = {
     icon:       '🌄',
     name:       'El Paseo',
     subtitle:   'Para disfrutar sin presión de tiempo',
-    price:      '$60.000 COP',
+    price:      '$600.000 COP',
+    priceNum:   600000,
     difficulty: 2,
     specs: [
       { label: 'Distancia',   value: '50 km' },
       { label: 'Desnivel +',  value: '1 200 m' },
       { label: 'Tiempo máx.', value: 'Sin límite*' },
-      { label: 'Cupos',       value: '200 participantes' },
-      { label: 'Inscripción', value: '$60.000 COP' },
+      { label: 'Inscripción', value: '$600.000 COP' },
     ],
     kit: [
       'Número de participante',
@@ -165,7 +165,7 @@ export const SPECIAL_PRIZES = [
 // ─── FAQ ──────────────────────────────────────────────────────────────────────
 export const FAQ_ITEMS = [
   { q: '¿Qué tipo de bicicleta necesito?', a: 'Para la Gravel Race es imprescindible una bicicleta de Gravel o MTB con neumáticos de al menos 35mm y frenos de disco. Para El Paseo cualquier bicicleta de terreno mixto: MTB, gravel, híbrida o cicloturista.' },
-  { q: '¿Puedo inscribirme el mismo día del evento?', a: 'No. La inscripción cierra el 15 de septiembre de 2026 o cuando se agoten los cupos. No habrá inscripciones el día del evento.' },
+  { q: '¿Puedo inscribirme el mismo día del evento?', a: 'No. La inscripción cierra el 15 de septiembre de 2026. No habrá inscripciones el día del evento.' },
   { q: '¿Hay política de reembolso?', a: 'Sí. Cancelaciones hasta el 5 de septiembre reciben el 80% del valor. Del 6 al 15 de septiembre se reembolsa el 50%. Después no hay reembolso, pero puedes ceder tu inscripción (costo administrativo $15.000 COP).' },
   { q: '¿Incluye transporte o alojamiento?', a: 'La inscripción no incluye transporte ni alojamiento. Tenemos alianzas con hoteles locales en Sevilla con tarifas especiales. Escríbenos para el código de descuento.' },
   { q: '¿Dónde dejo la bicicleta al terminar?', a: 'Habrá zona de parqueo de bicicletas vigilada y gratuita en meta desde las 4:30 am hasta las 7:00 pm.' },

@@ -1,37 +1,20 @@
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
 import { Textarea } from '@/components/ui/textarea'
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select'
 import { Checkbox } from '@/components/ui/checkbox'
 import { RadioGroup, RadioGroupItem } from '@/components/ui/radio-group'
-import { Progress } from '@/components/ui/progress'
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from '@/components/ui/dialog'
 import { SectionHeader } from './About'
 import { CATEGORIES, MODAL_CONTENT } from '@/lib/constants'
+import { createMPPreference } from '@/lib/mercadopago'
 import { cn } from '@/lib/utils'
 
-const A = '#c47818'
+const A  = '#c47818'
+const MP = '#009EE3'   /* MercadoPago brand blue */
 
 const STEPS = ['Categoría', 'Datos', 'Salud', 'Pago']
-
-const PAYMENT_INFO = {
-  nequi: {
-    title: 'Instrucciones Nequi / Daviplata',
-    body: 'Envía el pago al número **300 123 4567** (Nombre: Organización Zarzo SAS).\nSube el comprobante en el campo a continuación.',
-    showUpload: true,
-  },
-  transferencia: {
-    title: 'Datos Bancarios',
-    body: 'Bancolombia · Cuenta de Ahorros\nNro: **123-456789-12**\nA nombre de: **Organización Zarzo SAS**\nNIT: 900.123.456-7',
-    showUpload: true,
-  },
-  efectivo: {
-    title: 'Puntos de Pago Efectivo',
-    body: 'Baloto · Efecty · Su Red\nReferencia de pago: Se generará al finalizar el registro.\nVálido hasta 48 horas después de completar el formulario.',
-    showUpload: false,
-  },
-}
 
 function FF({ label, children, required }) {
   return (
@@ -62,22 +45,65 @@ function ModalContent({ type }) {
   )
 }
 
+/* ── MP logo SVG (oficial, inline) ───────────────────────────────────────── */
+function MPLogo() {
+  return (
+    <svg height="18" viewBox="0 0 80 20" fill="none" xmlns="http://www.w3.org/2000/svg" aria-label="MercadoPago">
+      <text x="0" y="15" fontSize="13" fontWeight="700" fill="white" fontFamily="system-ui, sans-serif">
+        MercadoPago
+      </text>
+    </svg>
+  )
+}
+
 export default function Registration() {
-  const [step, setStep]       = useState(0)
-  const [success, setSuccess] = useState(false)
-  const [modal, setModal]     = useState(null)
-  const [form, setForm]       = useState({
+  const [step,     setStep]     = useState(0)
+  const [success,  setSuccess]  = useState(null)   /* null | 'ok' | 'error' | 'pendiente' */
+  const [isPaying, setIsPaying] = useState(false)
+  const [payError, setPayError] = useState(null)
+  const [modal,    setModal]    = useState(null)
+
+  const [form, setForm] = useState({
     categoria: '', subcategoria: '', talla: '',
     nombre: '', apellido: '', documento: '', nacimiento: '', genero: '', ciudad: '', email: '', telefono: '', club: '',
     rh: '', eps: '', alergias: '', medicamentos: '', emergenciaNombre: '', emergenciaTel: '', emergenciaRel: '', aptoMedico: false,
-    pago: '', terminos: false, reglamento: false,
+    terminos: false, reglamento: false,
   })
+
+  /* Detect MercadoPago return — reads ?inscripcion= from URL */
+  useEffect(() => {
+    const params = new URLSearchParams(window.location.search)
+    const status = params.get('inscripcion')
+    if (status) {
+      setSuccess(status)
+      // Clean the URL without reloading
+      window.history.replaceState({}, '', window.location.pathname)
+    }
+  }, [])
 
   const set = (k, v) => setForm(f => ({ ...f, [k]: v }))
   const cat = form.categoria ? CATEGORIES[form.categoria] : null
-  const pi  = form.pago ? PAYMENT_INFO[form.pago] : null
 
-  if (success) return <SuccessScreen cat={cat} />
+  const handlePay = async () => {
+    if (!form.terminos || !form.reglamento) return
+    setIsPaying(true)
+    setPayError(null)
+    try {
+      const url = await createMPPreference({
+        categoria: form.categoria,
+        nombre:    form.nombre,
+        apellido:  form.apellido,
+        email:     form.email,
+        telefono:  form.telefono,
+      })
+      window.location.href = url
+    } catch (err) {
+      setPayError(err.message || 'Error al iniciar el pago. Intenta de nuevo.')
+      setIsPaying(false)
+    }
+  }
+
+  if (success) return <SuccessScreen status={success} cat={cat} />
 
   return (
     <section id="inscripcion" className="py-24 bg-background">
@@ -85,11 +111,12 @@ export default function Registration() {
         <SectionHeader
           tag="Regístrate"
           title="Formulario de Inscripción"
-          desc="Completa el formulario y asegura tu cupo. Los cupos son limitados."
+          desc="Completa el formulario en 4 pasos y paga de forma segura con MercadoPago."
         />
 
         <div className="grid lg:grid-cols-[280px_1fr] gap-10 items-start">
-          {/* Sidebar */}
+
+          {/* ── Sidebar ─────────────────────────────────────────────────── */}
           <div className="space-y-5 lg:sticky lg:top-24">
             {/* Price summary */}
             <div className="border border-border bg-card p-6">
@@ -106,9 +133,12 @@ export default function Registration() {
                     <span className="text-muted-foreground">Seguro accidentes</span>
                     <span style={{ color: '#4a7aaa' }}>Incluido</span>
                   </div>
-                  <div className="border-t border-border pt-3" style={{ borderLeft: `3px solid ${A}`, paddingLeft: 10 }}>
-                    <p className="text-xs font-semibold" style={{ color: A }}>
-                      🐦 Precio Early Bird hasta el 30 de Abril
+                  <div className="border-t border-border pt-3" style={{ borderLeft: `3px solid ${MP}`, paddingLeft: 10 }}>
+                    <p className="text-xs font-semibold" style={{ color: MP }}>
+                      🔒 Pago seguro con MercadoPago
+                    </p>
+                    <p className="text-xs text-muted-foreground mt-0.5">
+                      Tarjeta · PSE · Nequi · Efectivo
                     </p>
                   </div>
                 </div>
@@ -117,27 +147,31 @@ export default function Registration() {
               )}
             </div>
 
-            {/* Cupos */}
+            {/* Steps guide */}
             <div className="border border-border bg-card p-6">
-              <p className="text-[11px] font-bold tracking-[.3em] uppercase mb-4 text-foreground">
-                Estado de Cupos
-              </p>
-              {[
-                { label: 'Gravel Race', val: 62, text: '186/300', color: A },
-                { label: 'El Paseo',    val: 40, text: '80/200',  color: '#4a7aaa' },
-              ].map(c => (
-                <div key={c.label} className="mb-4 last:mb-0">
-                  <div className="flex justify-between text-xs text-muted-foreground mb-1.5">
-                    <span>{c.label}</span><span>{c.text}</span>
-                  </div>
-                  <Progress value={c.val} indicatorClassName={c.color === A ? 'bg-primary' : 'bg-[#4a7aaa]'} />
-                </div>
-              ))}
-              <p className="text-xs font-semibold mt-3" style={{ color: A }}>⚠️ Gravel Race llenando rápido</p>
+              <p className="text-[11px] font-bold tracking-[.3em] uppercase mb-4 text-foreground">Proceso</p>
+              <ol className="space-y-2">
+                {STEPS.map((s, i) => (
+                  <li key={s} className="flex items-center gap-3 text-xs">
+                    <span
+                      className="w-5 h-5 flex items-center justify-center text-[10px] font-bold shrink-0"
+                      style={{
+                        background: i < step ? A : i === step ? A : 'hsl(35 20% 88%)',
+                        color:      i <= step ? '#fff' : 'hsl(27 20% 42%)',
+                      }}
+                    >
+                      {i < step ? '✓' : i + 1}
+                    </span>
+                    <span style={{ color: i === step ? A : i < step ? 'hsl(27 30% 50%)' : 'hsl(27 15% 65%)' }}>
+                      {s}
+                    </span>
+                  </li>
+                ))}
+              </ol>
             </div>
           </div>
 
-          {/* Main form */}
+          {/* ── Main form ───────────────────────────────────────────────── */}
           <div className="border border-border bg-card">
             {/* Step bar */}
             <div className="flex border-b border-border">
@@ -147,9 +181,9 @@ export default function Registration() {
                   onClick={() => i < step && setStep(i)}
                   className="flex-1 py-3 text-[11px] font-bold uppercase tracking-wide transition-colors border-r border-border last:border-r-0"
                   style={{
-                    color: i === step ? '#fff' : i < step ? A : 'hsl(27 20% 42%)',
+                    color:      i === step ? '#fff' : i < step ? A : 'hsl(27 20% 42%)',
                     background: i === step ? A : 'transparent',
-                    cursor: i < step ? 'pointer' : 'default',
+                    cursor:     i < step ? 'pointer' : 'default',
                   }}
                 >
                   {i < step ? '✓ ' : `${i + 1}. `}{s}
@@ -158,7 +192,7 @@ export default function Registration() {
             </div>
 
             <div className="p-8">
-              <form onSubmit={e => { e.preventDefault(); setSuccess(true) }} className="space-y-5">
+              <div className="space-y-5">
 
                 {/* Step 0 — Category */}
                 {step === 0 && (
@@ -270,50 +304,33 @@ export default function Registration() {
                   </>
                 )}
 
-                {/* Step 3 — Payment */}
+                {/* Step 3 — Payment (MercadoPago) */}
                 {step === 3 && (
                   <>
-                    <h3 className="font-title text-2xl text-foreground tracking-wide">Método de Pago</h3>
+                    <h3 className="font-title text-2xl text-foreground tracking-wide">Resumen y Pago</h3>
+
+                    {/* Order summary */}
                     {cat && (
-                      <div className="border border-border p-4 flex justify-between items-center bg-muted">
-                        <div>
-                          <strong className="text-foreground text-sm block">{cat.name}</strong>
-                          <span className="text-muted-foreground text-xs">{form.nombre} {form.apellido} · {form.email}</span>
-                        </div>
-                        <strong className="font-title text-2xl" style={{ color: A }}>{cat.price}</strong>
-                      </div>
-                    )}
-                    <RadioGroup value={form.pago} onValueChange={v => set('pago', v)} className="grid sm:grid-cols-3 gap-3">
-                      {[
-                        { v: 'nequi',         label: 'Nequi / Daviplata',    sub: 'Pago inmediato' },
-                        { v: 'transferencia', label: 'Transferencia Bancaria', sub: 'Bancolombia · Davivienda' },
-                        { v: 'efectivo',      label: 'Efectivo',             sub: 'Puntos autorizados' },
-                      ].map(p => (
-                        <label key={p.v} htmlFor={`pm-${p.v}`}
-                          className="cursor-pointer border-2 p-4 text-center transition-all"
-                          style={{ borderColor: form.pago === p.v ? A : 'hsl(35 26% 77%)' }}>
-                          <RadioGroupItem value={p.v} id={`pm-${p.v}`} className="sr-only" />
-                          <strong className="text-foreground text-sm block">{p.label}</strong>
-                          <small className="text-muted-foreground text-xs">{p.sub}</small>
-                        </label>
-                      ))}
-                    </RadioGroup>
-                    {pi && (
                       <div className="border border-border p-5 bg-muted space-y-2">
-                        <h5 className="text-foreground font-semibold text-sm">{pi.title}</h5>
-                        <p className="text-muted-foreground text-sm leading-relaxed whitespace-pre-line"
-                          dangerouslySetInnerHTML={{ __html: pi.body.replace(/\*\*(.+?)\*\*/g, '<strong class="text-foreground">$1</strong>') }} />
-                        {pi.showUpload && (
-                          <div className="pt-2">
-                            <Label className="text-xs font-semibold uppercase tracking-wide">
-                              Comprobante de pago <span style={{ color: A }}>*</span>
-                            </Label>
-                            <Input type="file" accept="image/*,.pdf" className="mt-2 cursor-pointer" />
-                            <p className="text-muted-foreground text-xs mt-1">JPG, PNG, PDF. Máx 5 MB.</p>
+                        <div className="flex justify-between items-start">
+                          <div>
+                            <strong className="text-foreground block">{cat.name}</strong>
+                            <span className="text-muted-foreground text-xs">{form.nombre} {form.apellido}</span>
+                            <span className="text-muted-foreground text-xs block">{form.email}</span>
+                            {form.subcategoria && (
+                              <span className="text-xs mt-1 block" style={{ color: A }}>{form.subcategoria}</span>
+                            )}
                           </div>
-                        )}
+                          <strong className="font-title text-3xl shrink-0" style={{ color: A }}>{cat.price}</strong>
+                        </div>
+                        <div className="flex justify-between text-xs border-t border-border pt-2">
+                          <span className="text-muted-foreground">Seguro de accidentes</span>
+                          <span style={{ color: '#4a7aaa' }}>Incluido</span>
+                        </div>
                       </div>
                     )}
+
+                    {/* Legal checkboxes */}
                     <div className="space-y-4">
                       {[
                         { key: 'terminos',   label: 'Acepto los', link: 'terms',      linkLabel: 'Términos y Condiciones', suffix: 'y la', link2: 'privacy', link2Label: 'Política de Privacidad' },
@@ -330,6 +347,41 @@ export default function Registration() {
                         </div>
                       ))}
                     </div>
+
+                    {/* MercadoPago button */}
+                    <div className="space-y-3 pt-2">
+                      <button
+                        type="button"
+                        onClick={handlePay}
+                        disabled={!form.terminos || !form.reglamento || isPaying}
+                        className="w-full py-4 font-bold text-white text-sm uppercase tracking-widest flex items-center justify-center gap-3 transition-opacity"
+                        style={{
+                          background:    (!form.terminos || !form.reglamento || isPaying) ? '#aac9e5' : MP,
+                          cursor:        (!form.terminos || !form.reglamento || isPaying) ? 'not-allowed' : 'pointer',
+                        }}
+                      >
+                        {isPaying ? (
+                          <>
+                            <span className="inline-block w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin" />
+                            Conectando con MercadoPago…
+                          </>
+                        ) : (
+                          <>
+                            🔒 Pagar {cat?.price} · MercadoPago
+                          </>
+                        )}
+                      </button>
+
+                      <p className="text-center text-xs text-muted-foreground">
+                        Tarjeta de crédito/débito · PSE · Nequi · Daviplata · Efectivo (Baloto, Efecty)
+                      </p>
+
+                      {payError && (
+                        <div className="border border-red-300 bg-red-50 p-3 text-red-700 text-sm">
+                          ⚠️ {payError}
+                        </div>
+                      )}
+                    </div>
                   </>
                 )}
 
@@ -344,7 +396,7 @@ export default function Registration() {
                       ← Atrás
                     </button>
                   ) : <span />}
-                  {step < 3 ? (
+                  {step < 3 && (
                     <button
                       type="button"
                       onClick={() => setStep(s => s + 1)}
@@ -355,19 +407,9 @@ export default function Registration() {
                     >
                       Continuar →
                     </button>
-                  ) : (
-                    <button
-                      type="submit"
-                      className="px-8 py-2.5 text-sm font-bold text-white transition-colors"
-                      style={{ background: A }}
-                      onMouseEnter={e => e.currentTarget.style.background = '#8f5510'}
-                      onMouseLeave={e => e.currentTarget.style.background = A}
-                    >
-                      Completar Inscripción 🏁
-                    </button>
                   )}
                 </div>
-              </form>
+              </div>
             </div>
           </div>
         </div>
@@ -382,26 +424,51 @@ export default function Registration() {
   )
 }
 
-function SuccessScreen({ cat }) {
+function SuccessScreen({ status, cat }) {
+  const isPending = status === 'pendiente'
+  const isError   = status === 'error'
+
+  if (isError) {
+    return (
+      <section id="inscripcion" className="py-24 bg-background">
+        <div className="max-w-2xl mx-auto px-6 text-center">
+          <div className="text-7xl mb-6">❌</div>
+          <h3 className="font-title text-4xl text-foreground tracking-wide mb-4">Pago no completado</h3>
+          <p className="text-muted-foreground mb-8 leading-relaxed">
+            El pago fue rechazado o cancelado. Puedes intentarlo nuevamente.
+          </p>
+          <button
+            className="px-8 py-3 font-bold text-sm text-white"
+            style={{ background: '#c47818' }}
+            onClick={() => window.location.reload()}
+          >
+            Volver al formulario
+          </button>
+        </div>
+      </section>
+    )
+  }
+
   return (
     <section id="inscripcion" className="py-24 bg-background">
       <div className="max-w-2xl mx-auto px-6 text-center">
-        <div className="text-7xl mb-6 animate-bounce-up">🎉</div>
-        <h3 className="font-title text-5xl text-foreground tracking-wide mb-4">¡Inscripción Recibida!</h3>
+        <div className="text-7xl mb-6 animate-bounce-up">{isPending ? '⏳' : '🎉'}</div>
+        <h3 className="font-title text-5xl text-foreground tracking-wide mb-4">
+          {isPending ? '¡Pago en proceso!' : '¡Inscripción Confirmada!'}
+        </h3>
         <p className="text-muted-foreground mb-3 leading-relaxed">
-          Gracias por inscribirte a <strong className="text-foreground">Caídos del Zarzo 2026</strong>.
+          {isPending
+            ? 'Tu pago está siendo procesado por MercadoPago.'
+            : <>Bienvenido/a a <strong className="text-foreground">Caídos del Zarzo 2026</strong>. ¡Nos vemos en la montaña!</>
+          }
         </p>
         <p className="text-muted-foreground mb-10 leading-relaxed">
-          En los próximos <strong className="text-foreground">30 minutos</strong> recibirás un correo de confirmación
-          con tu número de participante y link de seguimiento de pago.
+          {isPending
+            ? 'Recibirás un correo cuando se confirme. El número de participante se enviará por email.'
+            : 'Recibirás tu confirmación por correo electrónico con tu número de participante e instrucciones para el kit de corredor.'
+          }
         </p>
         <div className="flex flex-wrap gap-4 justify-center mb-8">
-          <button
-            className="px-8 py-3 font-bold text-sm text-white"
-            style={{ background: A }}
-          >
-            Descargar Confirmación (PDF)
-          </button>
           <button
             className="px-8 py-3 font-bold text-sm border border-border text-foreground hover:border-foreground transition-colors"
             onClick={() => document.querySelector('#sobre')?.scrollIntoView({ behavior: 'smooth' })}
