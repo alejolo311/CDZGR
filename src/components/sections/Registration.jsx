@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react'
+import { useState } from 'react'
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
 import { Textarea } from '@/components/ui/textarea'
@@ -8,11 +8,10 @@ import { RadioGroup, RadioGroupItem } from '@/components/ui/radio-group'
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from '@/components/ui/dialog'
 import { SectionHeader } from './About'
 import { CATEGORIES, MODAL_CONTENT } from '@/lib/constants'
-import { createMPPreference } from '@/lib/mercadopago'
-import { cn } from '@/lib/utils'
+import { supabase } from '@/lib/supabase'
 
 const A  = '#c47818'
-const MP = '#009EE3'   /* MercadoPago brand blue */
+const MP = '#009EE3'
 
 const STEPS = ['Categoría', 'Datos', 'Salud', 'Pago']
 
@@ -45,20 +44,9 @@ function ModalContent({ type }) {
   )
 }
 
-/* ── MP logo SVG (oficial, inline) ───────────────────────────────────────── */
-function MPLogo() {
-  return (
-    <svg height="18" viewBox="0 0 80 20" fill="none" xmlns="http://www.w3.org/2000/svg" aria-label="MercadoPago">
-      <text x="0" y="15" fontSize="13" fontWeight="700" fill="white" fontFamily="system-ui, sans-serif">
-        MercadoPago
-      </text>
-    </svg>
-  )
-}
-
 export default function Registration() {
   const [step,     setStep]     = useState(0)
-  const [success,  setSuccess]  = useState(null)   /* null | 'ok' | 'error' | 'pendiente' */
+  const [success,  setSuccess]  = useState(false)
   const [isPaying, setIsPaying] = useState(false)
   const [payError, setPayError] = useState(null)
   const [modal,    setModal]    = useState(null)
@@ -66,20 +54,11 @@ export default function Registration() {
   const [form, setForm] = useState({
     categoria: '', subcategoria: '', talla: '',
     nombre: '', apellido: '', documento: '', nacimiento: '', genero: '', ciudad: '', email: '', telefono: '', club: '',
-    rh: '', eps: '', alergias: '', medicamentos: '', emergenciaNombre: '', emergenciaTel: '', emergenciaRel: '', aptoMedico: false,
+    rh: '', eps: '', alergias: '', medicamentos: '',
+    emergenciaNombre: '', emergenciaTel: '', emergenciaRel: '',
+    aptoMedico: false,
     terminos: false, reglamento: false,
   })
-
-  /* Detect MercadoPago return — reads ?inscripcion= from URL */
-  useEffect(() => {
-    const params = new URLSearchParams(window.location.search)
-    const status = params.get('inscripcion')
-    if (status) {
-      setSuccess(status)
-      // Clean the URL without reloading
-      window.history.replaceState({}, '', window.location.pathname)
-    }
-  }, [])
 
   const set = (k, v) => setForm(f => ({ ...f, [k]: v }))
   const cat = form.categoria ? CATEGORIES[form.categoria] : null
@@ -88,22 +67,47 @@ export default function Registration() {
     if (!form.terminos || !form.reglamento) return
     setIsPaying(true)
     setPayError(null)
+
     try {
-      const url = await createMPPreference({
-        categoria: form.categoria,
-        nombre:    form.nombre,
-        apellido:  form.apellido,
-        email:     form.email,
-        telefono:  form.telefono,
+      // Simular procesamiento de pago (1.5 s)
+      await new Promise(r => setTimeout(r, 1500))
+
+      // Guardar inscripción en Supabase
+      const { error } = await supabase.from('inscripciones').insert({
+        categoria:         form.categoria,
+        subcategoria:      form.subcategoria  || null,
+        talla:             form.talla,
+        nombre:            form.nombre,
+        apellido:          form.apellido,
+        documento:         form.documento,
+        nacimiento:        form.nacimiento,
+        genero:            form.genero,
+        ciudad:            form.ciudad,
+        email:             form.email,
+        telefono:          form.telefono,
+        club:              form.club         || null,
+        rh:                form.rh,
+        eps:               form.eps,
+        alergias:          form.alergias     || null,
+        medicamentos:      form.medicamentos || null,
+        emergencia_nombre: form.emergenciaNombre,
+        emergencia_tel:    form.emergenciaTel,
+        emergencia_rel:    form.emergenciaRel,
+        precio_cop:        cat.priceNum,
+        estado_pago:       'completado',
       })
-      window.location.href = url
+
+      if (error) throw error
+
+      setSuccess(true)
     } catch (err) {
-      setPayError(err.message || 'Error al iniciar el pago. Intenta de nuevo.')
+      console.error('[Inscripción] Error:', err)
+      setPayError(err.message || 'Error al guardar la inscripción. Intenta de nuevo.')
       setIsPaying(false)
     }
   }
 
-  if (success) return <SuccessScreen status={success} cat={cat} />
+  if (success) return <SuccessScreen nombre={form.nombre} cat={cat} />
 
   return (
     <section id="inscripcion" className="py-24 bg-background">
@@ -134,12 +138,8 @@ export default function Registration() {
                     <span style={{ color: '#4a7aaa' }}>Incluido</span>
                   </div>
                   <div className="border-t border-border pt-3" style={{ borderLeft: `3px solid ${MP}`, paddingLeft: 10 }}>
-                    <p className="text-xs font-semibold" style={{ color: MP }}>
-                      🔒 Pago seguro con MercadoPago
-                    </p>
-                    <p className="text-xs text-muted-foreground mt-0.5">
-                      Tarjeta · PSE · Nequi · Efectivo
-                    </p>
+                    <p className="text-xs font-semibold" style={{ color: MP }}>🔒 Pago seguro con MercadoPago</p>
+                    <p className="text-xs text-muted-foreground mt-0.5">Tarjeta · PSE · Nequi · Efectivo</p>
                   </div>
                 </div>
               ) : (
@@ -156,7 +156,7 @@ export default function Registration() {
                     <span
                       className="w-5 h-5 flex items-center justify-center text-[10px] font-bold shrink-0"
                       style={{
-                        background: i < step ? A : i === step ? A : 'hsl(35 20% 88%)',
+                        background: i <= step ? A : 'hsl(35 20% 88%)',
                         color:      i <= step ? '#fff' : 'hsl(27 20% 42%)',
                       }}
                     >
@@ -194,7 +194,7 @@ export default function Registration() {
             <div className="p-8">
               <div className="space-y-5">
 
-                {/* Step 0 — Category */}
+                {/* ── Step 0 · Categoría ────────────────────────────────── */}
                 {step === 0 && (
                   <>
                     <h3 className="font-title text-2xl text-foreground tracking-wide">Elige tu Categoría</h3>
@@ -238,7 +238,7 @@ export default function Registration() {
                   </>
                 )}
 
-                {/* Step 1 — Personal data */}
+                {/* ── Step 1 · Datos personales ──────────────────────────── */}
                 {step === 1 && (
                   <>
                     <h3 className="font-title text-2xl text-foreground tracking-wide">Datos Personales</h3>
@@ -263,7 +263,7 @@ export default function Registration() {
                   </>
                 )}
 
-                {/* Step 2 — Health */}
+                {/* ── Step 2 · Salud ─────────────────────────────────────── */}
                 {step === 2 && (
                   <>
                     <h3 className="font-title text-2xl text-foreground tracking-wide">Información de Salud</h3>
@@ -304,12 +304,12 @@ export default function Registration() {
                   </>
                 )}
 
-                {/* Step 3 — Payment (MercadoPago) */}
+                {/* ── Step 3 · Pago ──────────────────────────────────────── */}
                 {step === 3 && (
                   <>
                     <h3 className="font-title text-2xl text-foreground tracking-wide">Resumen y Pago</h3>
 
-                    {/* Order summary */}
+                    {/* Resumen del pedido */}
                     {cat && (
                       <div className="border border-border p-5 bg-muted space-y-2">
                         <div className="flex justify-between items-start">
@@ -330,10 +330,10 @@ export default function Registration() {
                       </div>
                     )}
 
-                    {/* Legal checkboxes */}
+                    {/* Legales */}
                     <div className="space-y-4">
                       {[
-                        { key: 'terminos',   label: 'Acepto los', link: 'terms',      linkLabel: 'Términos y Condiciones', suffix: 'y la', link2: 'privacy', link2Label: 'Política de Privacidad' },
+                        { key: 'terminos',   label: 'Acepto los', link: 'terms', linkLabel: 'Términos y Condiciones', suffix: 'y la', link2: 'privacy', link2Label: 'Política de Privacidad' },
                         { key: 'reglamento', label: 'He leído y acepto el', link: 'reglamento', linkLabel: 'Reglamento de la Carrera' },
                       ].map(c => (
                         <div key={c.key} className="flex items-start gap-3">
@@ -348,7 +348,7 @@ export default function Registration() {
                       ))}
                     </div>
 
-                    {/* MercadoPago button */}
+                    {/* Botón pagar */}
                     <div className="space-y-3 pt-2">
                       <button
                         type="button"
@@ -356,28 +356,26 @@ export default function Registration() {
                         disabled={!form.terminos || !form.reglamento || isPaying}
                         className="w-full py-4 font-bold text-white text-sm uppercase tracking-widest flex items-center justify-center gap-3 transition-opacity"
                         style={{
-                          background:    (!form.terminos || !form.reglamento || isPaying) ? '#aac9e5' : MP,
-                          cursor:        (!form.terminos || !form.reglamento || isPaying) ? 'not-allowed' : 'pointer',
+                          background: (!form.terminos || !form.reglamento || isPaying) ? '#aac9e5' : MP,
+                          cursor:     (!form.terminos || !form.reglamento || isPaying) ? 'not-allowed' : 'pointer',
                         }}
                       >
                         {isPaying ? (
                           <>
                             <span className="inline-block w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin" />
-                            Conectando con MercadoPago…
+                            Procesando pago…
                           </>
                         ) : (
-                          <>
-                            🔒 Pagar {cat?.price} · MercadoPago
-                          </>
+                          <>🔒 Pagar {cat?.price} · MercadoPago</>
                         )}
                       </button>
 
                       <p className="text-center text-xs text-muted-foreground">
-                        Tarjeta de crédito/débito · PSE · Nequi · Daviplata · Efectivo (Baloto, Efecty)
+                        Tarjeta de crédito/débito · PSE · Nequi · Daviplata · Efectivo
                       </p>
 
                       {payError && (
-                        <div className="border border-red-300 bg-red-50 p-3 text-red-700 text-sm">
+                        <div className="border border-red-300 bg-red-50 p-3 text-red-700 text-sm rounded">
                           ⚠️ {payError}
                         </div>
                       )}
@@ -385,7 +383,7 @@ export default function Registration() {
                   </>
                 )}
 
-                {/* Navigation */}
+                {/* Navegación entre pasos */}
                 <div className="flex justify-between pt-4 border-t border-border">
                   {step > 0 ? (
                     <button
@@ -424,49 +422,19 @@ export default function Registration() {
   )
 }
 
-function SuccessScreen({ status, cat }) {
-  const isPending = status === 'pendiente'
-  const isError   = status === 'error'
-
-  if (isError) {
-    return (
-      <section id="inscripcion" className="py-24 bg-background">
-        <div className="max-w-2xl mx-auto px-6 text-center">
-          <div className="text-7xl mb-6">❌</div>
-          <h3 className="font-title text-4xl text-foreground tracking-wide mb-4">Pago no completado</h3>
-          <p className="text-muted-foreground mb-8 leading-relaxed">
-            El pago fue rechazado o cancelado. Puedes intentarlo nuevamente.
-          </p>
-          <button
-            className="px-8 py-3 font-bold text-sm text-white"
-            style={{ background: '#c47818' }}
-            onClick={() => window.location.reload()}
-          >
-            Volver al formulario
-          </button>
-        </div>
-      </section>
-    )
-  }
-
+/* ── Pantalla de éxito ───────────────────────────────────────────────────── */
+function SuccessScreen({ nombre, cat }) {
   return (
     <section id="inscripcion" className="py-24 bg-background">
       <div className="max-w-2xl mx-auto px-6 text-center">
-        <div className="text-7xl mb-6 animate-bounce-up">{isPending ? '⏳' : '🎉'}</div>
-        <h3 className="font-title text-5xl text-foreground tracking-wide mb-4">
-          {isPending ? '¡Pago en proceso!' : '¡Inscripción Confirmada!'}
-        </h3>
+        <div className="text-7xl mb-6 animate-bounce-up">🎉</div>
+        <h3 className="font-title text-5xl text-foreground tracking-wide mb-4">¡Inscripción Confirmada!</h3>
         <p className="text-muted-foreground mb-3 leading-relaxed">
-          {isPending
-            ? 'Tu pago está siendo procesado por MercadoPago.'
-            : <>Bienvenido/a a <strong className="text-foreground">Caídos del Zarzo 2026</strong>. ¡Nos vemos en la montaña!</>
-          }
+          ¡Bienvenido/a, <strong className="text-foreground">{nombre}</strong>! Tu lugar en{' '}
+          <strong className="text-foreground">Caídos del Zarzo 2026</strong> está asegurado.
         </p>
         <p className="text-muted-foreground mb-10 leading-relaxed">
-          {isPending
-            ? 'Recibirás un correo cuando se confirme. El número de participante se enviará por email.'
-            : 'Recibirás tu confirmación por correo electrónico con tu número de participante e instrucciones para el kit de corredor.'
-          }
+          Recibirás un correo de confirmación con tu número de participante e instrucciones para el kit de corredor.
         </p>
         <div className="flex flex-wrap gap-4 justify-center mb-8">
           <button
