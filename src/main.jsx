@@ -3,8 +3,20 @@ import { createRoot } from 'react-dom/client'
 import './index.css'
 import App from './App.jsx'
 
-createRoot(document.getElementById('root')).render(
-  <StrictMode>
-    <App />
-  </StrictMode>,
-)
+const isAdmin = window.location.pathname.startsWith('/admin')
+
+if (isAdmin) {
+  import('./admin/AdminApp.jsx').then(({ default: AdminApp }) => {
+    createRoot(document.getElementById('root')).render(
+      <StrictMode>
+        <AdminApp />
+      </StrictMode>,
+    )
+  })
+} else {
+  createRoot(document.getElementById('root')).render(
+    <StrictMode>
+      <App />
+    </StrictMode>,
+  )
+}
