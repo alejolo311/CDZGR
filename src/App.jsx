@@ -18,7 +18,7 @@ function BackToTop() {
   return (
     <button
       onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}
-      className="fixed bottom-7 right-7 z-50 w-12 h-12 bg-primary rounded-full text-white font-bold shadow-[0_4px_20px_rgba(249,115,22,.5)] hover:bg-orange-dark hover:-translate-y-1 transition-all flex items-center justify-center"
+      className="fixed bottom-7 right-7 z-50 w-12 h-12 bg-primary rounded-full text-white font-bold shadow-[0_4px_20px_rgba(84,165,49,.5)] hover:bg-orange-dark hover:-translate-y-1 transition-all flex items-center justify-center"
       aria-label="Volver arriba"
     >
       ↑

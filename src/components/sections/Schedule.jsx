@@ -20,7 +20,7 @@ function TimelineItem({ item }) {
 
 export default function Schedule() {
   return (
-    <section id="cronograma" className="py-24 bg-[#0d0d0d]">
+    <section id="cronograma" className="py-24 bg-[#070d07]">
       <div className="max-w-4xl mx-auto px-6">
         <SectionHeader
           tag="Agenda"
