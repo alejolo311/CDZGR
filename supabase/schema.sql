@@ -60,3 +60,12 @@ CREATE POLICY "select_admin" ON inscripciones
 -- Solo usuarios autenticados pueden actualizar (ej: asignar número de participante)
 CREATE POLICY "update_admin" ON inscripciones
   FOR UPDATE TO authenticated USING (true);
+
+-- ── Panel de administración ────────────────────────────────────
+-- Para activar el login de administrador en gravel.caidosdelzarzo.com/admin:
+--
+-- 1. Ir a Supabase Dashboard → Authentication → Users → "Add user"
+-- 2. Crear usuario: admin@caidosdelzarzo.co (o el email que prefieras)
+-- 3. Asignar una contraseña segura
+-- 4. En Authentication → Settings → asegurarse de que "Email" está habilitado
+-- 5. Acceder a: https://gravel.caidosdelzarzo.com/admin
