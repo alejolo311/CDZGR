@@ -8,7 +8,7 @@ import { RadioGroup, RadioGroupItem } from '@/components/ui/radio-group'
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from '@/components/ui/dialog'
 import { SectionHeader } from './About'
 import { CATEGORIES, MODAL_CONTENT } from '@/lib/constants'
-import { supabase } from '@/lib/supabase'
+import { supabase }          from '@/lib/supabase'
 import { createMPPreference } from '@/lib/mercadopago'
 
 const A  = '#c47818'
@@ -60,17 +60,8 @@ export default function Registration() {
 
     setSuccess(estado)
     window.history.replaceState({}, '', window.location.pathname)
-
-    // Solo al confirmar pago exitoso enviamos el correo de confirmación
-    if (estado === 'ok') {
-      const raw = sessionStorage.getItem('cdzgr_pago')
-      if (raw) {
-        sessionStorage.removeItem('cdzgr_pago')
-        supabase.functions
-          .invoke('send-confirmation', { body: JSON.parse(raw) })
-          .catch(err => console.error('[Email confirmación]', err))
-      }
-    }
+    // El webhook mp-webhook actualiza estado_pago en Supabase y envía el
+    // correo de confirmación de forma confiable. No necesitamos hacerlo aquí.
   }, [])
 
   const [form, setForm] = useState({
@@ -132,17 +123,7 @@ export default function Registration() {
         externalRef: inscripcionId,
       })
 
-      // 3. Persistir datos para el email (la página se recarga al volver de MP)
-      sessionStorage.setItem('cdzgr_pago', JSON.stringify({
-        nombre:      form.nombre,
-        apellido:    form.apellido,
-        email:       form.email,
-        categoria:   form.categoria,
-        subcategoria: form.subcategoria || null,
-        precio_cop:  cat.priceNum,
-      }))
-
-      // 4. Redirigir al checkout de MercadoPago
+      // 3. Redirigir al checkout de MercadoPago
       window.location.href = url
     } catch (err) {
       console.error('[Inscripción] Error:', err)
