@@ -1,9 +1,11 @@
 import { useState, useEffect, useMemo } from 'react'
 import { supabase } from '@/lib/supabase'
+import { createMPPreference } from '@/lib/mercadopago'
+import EditModal from './EditModal'
 
 const A = '#c47818'
 
-// ── helpers ──────────────────────────────────────────────────────────────────
+// ── helpers ───────────────────────────────────────────────────────────────────
 
 function fmt(n) {
   return new Intl.NumberFormat('es-CO', { style: 'currency', currency: 'COP', maximumFractionDigits: 0 }).format(n)
@@ -41,6 +43,155 @@ function Badge({ estado }) {
   )
 }
 
+function Detail({ label, value, mono }) {
+  return (
+    <div>
+      <div className="text-zinc-600 uppercase tracking-wider mb-0.5 text-[10px]">{label}</div>
+      <div className={`text-zinc-300 text-xs ${mono ? 'font-mono break-all' : ''}`}>
+        {value || <span className="text-zinc-700">—</span>}
+      </div>
+    </div>
+  )
+}
+
+// ── AccionesRow ───────────────────────────────────────────────────────────────
+
+function AccionesRow({ row, onEdit, onRowUpdated }) {
+  const [mpState,   setMpState]   = useState('idle')   // idle | loading | done | error
+  const [mpLink,    setMpLink]    = useState(null)
+  const [mpErr,     setMpErr]     = useState(null)
+  const [mailState, setMailState] = useState('idle')   // idle | loading | sent | error
+  const [mailErr,   setMailErr]   = useState(null)
+  const [copied,    setCopied]    = useState(false)
+
+  const generateLink = async () => {
+    setMpState('loading')
+    setMpErr(null)
+    try {
+      const url = await createMPPreference({
+        categoria:   row.categoria,
+        nombre:      row.nombre,
+        apellido:    row.apellido,
+        email:       row.email,
+        telefono:    row.telefono,
+        externalRef: row.id,
+      })
+      setMpLink(url)
+      setMpState('done')
+    } catch (e) {
+      setMpErr(e.message)
+      setMpState('error')
+    }
+  }
+
+  const copyLink = () => {
+    navigator.clipboard.writeText(mpLink)
+    setCopied(true)
+    setTimeout(() => setCopied(false), 2000)
+  }
+
+  const sendEmail = async () => {
+    setMailState('loading')
+    setMailErr(null)
+    try {
+      const { error } = await supabase.functions.invoke('send-confirmation', {
+        body: {
+          nombre:       row.nombre,
+          apellido:     row.apellido,
+          email:        row.email,
+          categoria:    row.categoria,
+          subcategoria: row.subcategoria ?? undefined,
+          precio_cop:   row.precio_cop,
+        },
+      })
+      if (error) throw new Error(error.message)
+      setMailState('sent')
+    } catch (e) {
+      setMailErr(e.message)
+      setMailState('error')
+    }
+  }
+
+  return (
+    <div className="mt-4 pt-4 border-t border-zinc-700/50 flex flex-wrap gap-2 items-start">
+
+      {/* ── Editar ── */}
+      <button
+        onClick={() => onEdit(row)}
+        className="flex items-center gap-1.5 text-xs px-3 py-1.5 rounded border border-zinc-700 text-zinc-300 hover:text-white hover:border-zinc-500 transition-colors"
+      >
+        ✎ Editar datos
+      </button>
+
+      {/* ── Link de pago ── */}
+      <div className="flex flex-wrap items-center gap-2">
+        {mpState !== 'done' ? (
+          <button
+            onClick={generateLink}
+            disabled={mpState === 'loading'}
+            className="flex items-center gap-1.5 text-xs px-3 py-1.5 rounded border transition-colors disabled:opacity-50"
+            style={{ borderColor: '#c47818', color: '#c47818' }}
+          >
+            {mpState === 'loading' ? (
+              <><span className="w-3 h-3 border border-amber-500 border-t-transparent rounded-full animate-spin inline-block" /> Generando…</>
+            ) : '⟳ Generar link de pago'}
+          </button>
+        ) : (
+          <div className="flex items-center gap-2 flex-wrap">
+            <span className="text-xs text-zinc-400 bg-zinc-800 border border-zinc-700 rounded px-2 py-1 max-w-[220px] truncate font-mono">
+              {mpLink}
+            </span>
+            <button
+              onClick={copyLink}
+              className="text-xs px-3 py-1.5 rounded border border-zinc-700 text-zinc-300 hover:text-white transition-colors"
+            >
+              {copied ? '✓ Copiado' : 'Copiar'}
+            </button>
+            <a
+              href={mpLink}
+              target="_blank"
+              rel="noreferrer"
+              className="text-xs px-3 py-1.5 rounded border border-zinc-700 text-zinc-300 hover:text-white transition-colors"
+            >
+              Abrir ↗
+            </a>
+            <button
+              onClick={() => { setMpState('idle'); setMpLink(null) }}
+              className="text-xs text-zinc-600 hover:text-zinc-400"
+            >
+              ✕
+            </button>
+          </div>
+        )}
+        {mpState === 'error' && (
+          <span className="text-xs text-red-400">{mpErr}</span>
+        )}
+      </div>
+
+      {/* ── Enviar correo ── */}
+      <div className="flex items-center gap-2">
+        {mailState === 'sent' ? (
+          <span className="text-xs text-emerald-400 flex items-center gap-1">✓ Correo enviado a {row.email}</span>
+        ) : (
+          <button
+            onClick={sendEmail}
+            disabled={mailState === 'loading'}
+            className="flex items-center gap-1.5 text-xs px-3 py-1.5 rounded border border-zinc-700 text-zinc-300 hover:text-white transition-colors disabled:opacity-50"
+          >
+            {mailState === 'loading' ? (
+              <><span className="w-3 h-3 border border-zinc-400 border-t-transparent rounded-full animate-spin inline-block" /> Enviando…</>
+            ) : '✉ Enviar confirmación'}
+          </button>
+        )}
+        {mailState === 'error' && (
+          <span className="text-xs text-red-400">{mailErr}</span>
+        )}
+      </div>
+
+    </div>
+  )
+}
+
 // ── main ──────────────────────────────────────────────────────────────────────
 
 export default function Dashboard({ session }) {
@@ -54,6 +205,7 @@ export default function Dashboard({ session }) {
   const [numInput,   setNumInput]   = useState('')
   const [saving,     setSaving]     = useState(false)
   const [expanded,   setExpanded]   = useState(null)
+  const [editRow,    setEditRow]    = useState(null)  // fila abierta en EditModal
 
   // ── fetch ──────────────────────────────────────────────────────────────────
 
@@ -116,6 +268,12 @@ export default function Dashboard({ session }) {
     setSaving(false)
   }
 
+  // ── edit modal callbacks ────────────────────────────────────────────────────
+
+  const handleSaved = (updated) => {
+    setRows(prev => prev.map(r => r.id === updated.id ? updated : r))
+  }
+
   // ── export CSV ─────────────────────────────────────────────────────────────
 
   const exportCSV = () => {
@@ -128,21 +286,16 @@ export default function Dashboard({ session }) {
     ]
     const header = cols.join(',')
     const csvRows = filtered.map(r =>
-      cols.map(c => {
-        const v = r[c] ?? ''
-        return `"${String(v).replace(/"/g, '""')}"`
-      }).join(',')
+      cols.map(c => `"${String(r[c] ?? '').replace(/"/g, '""')}"`).join(',')
     )
     const blob = new Blob([header + '\n' + csvRows.join('\n')], { type: 'text/csv;charset=utf-8;' })
-    const url = URL.createObjectURL(blob)
-    const a = document.createElement('a')
-    a.href = url
+    const url  = URL.createObjectURL(blob)
+    const a    = document.createElement('a')
+    a.href     = url
     a.download = `inscripciones_${new Date().toISOString().slice(0,10)}.csv`
     a.click()
     URL.revokeObjectURL(url)
   }
-
-  // ── logout ─────────────────────────────────────────────────────────────────
 
   const logout = () => supabase.auth.signOut()
 
@@ -150,6 +303,15 @@ export default function Dashboard({ session }) {
 
   return (
     <div className="min-h-screen bg-zinc-950 text-white">
+
+      {/* Edit Modal */}
+      {editRow && (
+        <EditModal
+          row={editRow}
+          onClose={() => setEditRow(null)}
+          onSaved={handleSaved}
+        />
+      )}
 
       {/* Header */}
       <header className="border-b border-zinc-800 px-6 py-3 flex items-center justify-between">
@@ -172,11 +334,11 @@ export default function Dashboard({ session }) {
 
         {/* Stats */}
         <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-3">
-          <StatCard label="Total inscritos"  value={stats.total}      />
-          <StatCard label="Gravel Race"      value={stats.gravel}     />
-          <StatCard label="El Paseo"         value={stats.paseo}      />
-          <StatCard label="Pagos completos"  value={stats.completado} />
-          <StatCard label="Pendientes"       value={stats.pendiente}  />
+          <StatCard label="Total inscritos"  value={stats.total}                    />
+          <StatCard label="Gravel Race"      value={stats.gravel}                   />
+          <StatCard label="El Paseo"         value={stats.paseo}                    />
+          <StatCard label="Pagos completos"  value={stats.completado}               />
+          <StatCard label="Pendientes"       value={stats.pendiente}                />
           <StatCard label="Recaudo real"     value={fmt(stats.recaudo)} sub="solo completados" />
         </div>
 
@@ -250,7 +412,6 @@ export default function Dashboard({ session }) {
         ) : filtered.length === 0 ? (
           <div className="text-center py-20 text-zinc-600">Sin resultados</div>
         ) : (
-          /* Tabla */
           <div className="overflow-x-auto rounded-lg border border-zinc-800">
             <table className="w-full text-sm">
               <thead>
@@ -292,15 +453,8 @@ export default function Dashboard({ session }) {
                               className="w-20 bg-zinc-800 border border-amber-500 rounded px-2 py-1 text-xs text-white focus:outline-none"
                               placeholder="ej: 042"
                             />
-                            <button
-                              onClick={() => saveNumber(row.id)}
-                              disabled={saving}
-                              className="text-xs text-emerald-400 hover:text-emerald-300 px-1"
-                            >✓</button>
-                            <button
-                              onClick={() => setEditingId(null)}
-                              className="text-xs text-zinc-500 hover:text-zinc-300 px-1"
-                            >✕</button>
+                            <button onClick={() => saveNumber(row.id)} disabled={saving} className="text-xs text-emerald-400 hover:text-emerald-300 px-1">✓</button>
+                            <button onClick={() => setEditingId(null)} className="text-xs text-zinc-500 hover:text-zinc-300 px-1">✕</button>
                           </div>
                         ) : (
                           <button
@@ -318,22 +472,29 @@ export default function Dashboard({ session }) {
                       </td>
                     </tr>
 
-                    {/* Fila expandida con datos médicos y emergencia */}
+                    {/* Fila expandida */}
                     {expanded === row.id && (
                       <tr key={row.id + '-exp'} className="bg-zinc-900/40 border-b border-zinc-800">
-                        <td colSpan={12} className="px-6 py-4">
-                          <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-4 text-xs">
-                            <Detail label="Teléfono"    value={row.telefono} />
-                            <Detail label="Nacimiento"  value={row.nacimiento} />
-                            <Detail label="Género"      value={row.genero} />
-                            <Detail label="Club"        value={row.club} />
-                            <Detail label="RH"          value={row.rh} />
-                            <Detail label="EPS"         value={row.eps} />
-                            <Detail label="Alergias"    value={row.alergias} />
+                        <td colSpan={12} className="px-6 py-5">
+                          <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-4">
+                            <Detail label="Teléfono"     value={row.telefono} />
+                            <Detail label="Nacimiento"   value={row.nacimiento} />
+                            <Detail label="Género"       value={row.genero} />
+                            <Detail label="Club"         value={row.club} />
+                            <Detail label="RH"           value={row.rh} />
+                            <Detail label="EPS"          value={row.eps} />
+                            <Detail label="Alergias"     value={row.alergias} />
                             <Detail label="Medicamentos" value={row.medicamentos} />
-                            <Detail label="Emergencia"  value={`${row.emergencia_nombre} · ${row.emergencia_tel} (${row.emergencia_rel})`} />
-                            <Detail label="ID Supabase" value={row.id} mono />
+                            <Detail label="Emergencia"   value={`${row.emergencia_nombre} · ${row.emergencia_tel} (${row.emergencia_rel})`} />
+                            <Detail label="ID Supabase"  value={row.id} mono />
                           </div>
+
+                          {/* ── Acciones ── */}
+                          <AccionesRow
+                            row={row}
+                            onEdit={r => setEditRow(r)}
+                            onRowUpdated={handleSaved}
+                          />
                         </td>
                       </tr>
                     )}
@@ -343,17 +504,6 @@ export default function Dashboard({ session }) {
             </table>
           </div>
         )}
-      </div>
-    </div>
-  )
-}
-
-function Detail({ label, value, mono }) {
-  return (
-    <div>
-      <div className="text-zinc-600 uppercase tracking-wider mb-0.5">{label}</div>
-      <div className={`text-zinc-300 ${mono ? 'font-mono text-[10px] break-all' : ''}`}>
-        {value || <span className="text-zinc-700">—</span>}
       </div>
     </div>
   )
