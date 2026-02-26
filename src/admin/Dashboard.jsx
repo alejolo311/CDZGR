@@ -1,7 +1,8 @@
 import { useState, useEffect, useMemo } from 'react'
 import { supabase } from '@/lib/supabase'
 import { createMPPreference } from '@/lib/mercadopago'
-import EditModal from './EditModal'
+import EditModal    from './EditModal'
+import GroupPanel   from './GroupPanel'
 
 const A = '#c47818'
 
@@ -195,6 +196,7 @@ function AccionesRow({ row, onEdit, onRowUpdated }) {
 // ── main ──────────────────────────────────────────────────────────────────────
 
 export default function Dashboard({ session }) {
+  const [tab,        setTab]        = useState('inscripciones')  // 'inscripciones' | 'grupos'
   const [rows,       setRows]       = useState([])
   const [loading,    setLoading]    = useState(true)
   const [error,      setError]      = useState(null)
@@ -331,6 +333,32 @@ export default function Dashboard({ session }) {
       </header>
 
       <div className="max-w-7xl mx-auto px-4 sm:px-6 py-8 space-y-8">
+
+        {/* Tabs */}
+        <div className="flex border-b border-zinc-800">
+          {[
+            { id: 'inscripciones', label: 'Inscripciones Individuales' },
+            { id: 'grupos',        label: 'Inscripciones Grupales' },
+          ].map(t => (
+            <button
+              key={t.id}
+              onClick={() => setTab(t.id)}
+              className="px-5 py-3 text-sm font-semibold transition-colors border-b-2 -mb-px"
+              style={{
+                borderColor: tab === t.id ? A : 'transparent',
+                color:       tab === t.id ? '#fff' : '#52525b',
+              }}
+            >
+              {t.label}
+            </button>
+          ))}
+        </div>
+
+        {/* ══ Panel Grupos ══ */}
+        {tab === 'grupos' && <GroupPanel />}
+
+        {/* ══ Panel Inscripciones ══ */}
+        {tab === 'inscripciones' && <>
 
         {/* Stats */}
         <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-3">
@@ -504,6 +532,9 @@ export default function Dashboard({ session }) {
             </table>
           </div>
         )}
+
+        </>}  {/* end tab === 'inscripciones' */}
+
       </div>
     </div>
   )
