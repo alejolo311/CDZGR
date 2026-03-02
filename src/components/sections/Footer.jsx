@@ -56,7 +56,7 @@ export default function Footer() {
           </p>
           <p className="text-[13px] mt-2" style={{ color: MUTED }}>
             Sevilla, Valle del Cauca<br />
-            19–20 septiembre 2025
+            19–20 septiembre 2026
           </p>
         </div>
 
@@ -88,7 +88,7 @@ export default function Footer() {
 
       <div className="max-w-6xl mx-auto px-6 py-5 flex flex-col sm:flex-row justify-between items-center gap-2">
         <p className="text-xs" style={{ color: MUTED }}>
-          © 2025 Caídos del Zarzo Gravel Race
+          © 2026 Caídos del Zarzo Gravel Race
         </p>
         <p className="text-xs" style={{ color: MUTED }}>
           Sevilla, Valle del Cauca, Colombia

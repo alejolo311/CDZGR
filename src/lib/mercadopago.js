@@ -15,8 +15,8 @@ const PRICES = {
 }
 
 const TITLES = {
-  gravel: 'La Trocha – Caídos del Zarzo Gravel 2025',
-  paseo:  'La Visita – Caídos del Zarzo Gravel 2025',
+  gravel: 'La Trocha – Caídos del Zarzo Gravel 2026',
+  paseo:  'La Visita – Caídos del Zarzo Gravel 2026',
 }
 
 export const GRUPO_DESCUENTO  = 0.10  // 10 % de descuento para grupos

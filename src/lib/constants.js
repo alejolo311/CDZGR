@@ -1,9 +1,9 @@
 // ─── Event metadata ──────────────────────────────────────────────────────────
 export const EVENT = {
   name:      'Caídos del Zarzo',
-  year:      2025,
-  date:      '2025-09-19T07:00:00',
-  dateLabel: '19 y 20 de septiembre 2025',
+  year:      2026,
+  date:      '2026-09-19T07:00:00',
+  dateLabel: '19 y 20 de septiembre 2026',
   location:  'Sevilla, Valle del Cauca',
   organizer: 'Caídos del Zarzo',
   hashtag:   '#CaidosDelZarzo',
