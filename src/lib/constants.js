@@ -1,192 +1,106 @@
 // ─── Event metadata ──────────────────────────────────────────────────────────
 export const EVENT = {
   name:      'Caídos del Zarzo',
-  year:      2026,
-  date:      '2026-09-20T06:30:00',
-  dateLabel: '20 de Septiembre 2026',
-  location:  'Plaza Central, Sevilla Valle',
-  organizer: 'Caídos del Zarzo SAS',
-  hashtag:   '#CaidosDelZarzo2026',
+  year:      2025,
+  date:      '2025-09-19T07:00:00',
+  dateLabel: '19 y 20 de septiembre 2025',
+  location:  'Sevilla, Valle del Cauca',
+  organizer: 'Caídos del Zarzo',
+  hashtag:   '#CaidosDelZarzo',
   email:     'info@caidosdelzarzo.co',
   whatsapp:  '+57 300 123 4567',
   whatsappHref: 'https://wa.me/573001234567',
   address:   'Sevilla, Valle del Cauca, Colombia',
-  horario:   'Lun – Vie: 9am–6pm · Sáb: 10am–2pm',
+  capacity:  280,
 }
 
 // ─── Stats ribbon ─────────────────────────────────────────────────────────────
 export const STATS = [
-  { value: '100 km',   label: 'Distancia Gravel' },
-  { value: '3 500 m',  label: 'Desnivel + Gravel' },
-  { value: '50 km',    label: 'Distancia Paseo' },
-  { value: '1 200 m',  label: 'Desnivel + Paseo' },
-  { value: '2',        label: 'Modalidades' },
-  { value: '8 h',      label: 'Tiempo máx. Gravel' },
+  { value: '280',     label: 'Cupos' },
+  { value: '110 km',  label: 'La Trocha' },
+  { value: '2.500 m', label: 'Desnivel +' },
+  { value: '60 km',   label: 'La Visita' },
+  { value: '2',       label: 'Modalidades' },
 ]
 
-// ─── About feature list ───────────────────────────────────────────────────────
-export const FEATURES = [
-  'Kit oficial del participante incluido',
-  'Avituallamiento en ruta y al llegar',
-  'Servicio médico y rescate en ruta',
-  'Cronometraje electrónico (Gravel Race)',
-  'Fiesta de finalistas y premiación',
-  'Fotos y video profesional de la jornada',
-  'Seguro de accidentes incluido',
-  'App oficial para seguimiento en tiempo real',
-]
-
-export const ABOUT_CARDS = [
-  { icon: '🏔️', title: 'Terreno Épico', desc: 'Caminos de gravel, senderos técnicos y descensos explosivos entre montañas vírgenes.' },
-  { icon: '🤝', title: 'Comunidad', desc: 'Rodadores, familias y aventureros. Un evento para todos los que aman las dos ruedas.' },
-  { icon: '🛡️', title: 'Seguridad Total', desc: 'Paramédicos, puntos de control y comunicación constante durante todo el recorrido.' },
-  { icon: '🎉', title: 'Post-Carrera', desc: 'Premiación, música en vivo, comida típica y cerveza artesanal para todos los finishers.' },
-]
-
-// ─── Categories ───────────────────────────────────────────────────────────────
+// ─── Categories (used by Registration form) ─────────────────────────────────
 export const CATEGORIES = {
   gravel: {
     id:         'gravel',
-    badge:      '⚡ COMPETITIVA',
-    icon:       '🏆',
-    name:       'Gravel Race',
-    subtitle:   'Para los que no conocen el límite',
-    price:      '$899.000 COP',
-    priceNum:   899000,
+    badge:      'COMPETITIVA',
+    icon:       '⛰️',
+    name:       'La Trocha',
+    subtitle:   '240 cupos · Cronometrada',
+    price:      '$499.000 COP',
+    priceNum:   499000,
     difficulty: 5,
     specs: [
-      { label: 'Distancia',   value: '100 km' },
-      { label: 'Desnivel +',  value: '3 500 m' },
-      { label: 'Tiempo máx.', value: '8 horas' },
-      { label: 'Inscripción', value: '$899.000 COP' },
+      { label: 'Distancia',   value: '90–110 km' },
+      { label: 'Desnivel +',  value: '2.000–2.500 m' },
+      { label: 'Terreno',     value: 'Destapados técnicos' },
+      { label: 'Tiempo est.', value: '7–10 horas' },
     ],
     kit: [
-      'Número y chip de cronometraje',
-      'Maillot oficial de la carrera',
-      '5 puntos de avituallamiento',
-      'Medalla finisher',
-      'Clasificación general y por categoría',
-      'Premios económicos top 3 general',
-      'Bolsa de corredor (kit, snacks, merch)',
-      'Seguro de accidentes',
-      'Fotos profesionales',
+      'Jersey de ciclismo exclusivo del evento',
+      'Pocillo cafetero esmaltado',
+      'Mapa-póster de la ruta',
+      'Número de participante y cronometraje',
+      'Nutrition bag de yute con productos locales',
+      '3 puntos de hidratación y alimentación',
+      'Mecánico volante en moto',
+      'Cuarto de libra de café de Sevilla',
     ],
-    subcats: ['Sub-23', 'Open M/F', 'Master 35+', 'Master 45+', 'Master 55+'],
+    subcats: ['Open Masculino', 'Open Femenino', 'Master 35+'],
   },
   paseo: {
     id:         'paseo',
-    badge:      '🌿 RECREATIVA',
-    icon:       '🌄',
-    name:       'El Paseo',
-    subtitle:   'Para disfrutar sin presión de tiempo',
-    price:      '$600.000 COP',
-    priceNum:   600000,
+    badge:      'EXPERIENCIA',
+    icon:       '☕',
+    name:       'La Visita',
+    subtitle:   '40 cupos · Sin cronómetro',
+    price:      '$399.000 COP',
+    priceNum:   399000,
     difficulty: 2,
     specs: [
-      { label: 'Distancia',   value: '50 km' },
-      { label: 'Desnivel +',  value: '1 200 m' },
-      { label: 'Tiempo máx.', value: 'Sin límite*' },
-      { label: 'Inscripción', value: '$600.000 COP' },
+      { label: 'Distancia',   value: '45–60 km' },
+      { label: 'Desnivel +',  value: '800–1.200 m' },
+      { label: 'Paradas',     value: '3–4 experienciales' },
+      { label: 'Tiempo est.', value: '4–5 horas' },
     ],
     kit: [
+      'Jersey de ciclismo exclusivo del evento',
+      'Pocillo cafetero esmaltado',
+      'Mapa-póster de la ruta',
       'Número de participante',
-      'Camiseta técnica oficial',
-      '3 puntos de avituallamiento',
-      'Medalla finisher',
-      'Sin cronometraje (disfruta el paisaje)',
-      'Apto para familias y principiantes',
-      'Bolsa de corredor',
-      'Seguro de accidentes',
-      'Fotos profesionales',
+      'Nutrition bag de yute con productos locales',
+      '3–4 paradas con café, frutas y agua de panela',
+      'Visita a finca cafetera en ruta',
+      'Cuarto de libra de café de Sevilla',
     ],
-    subcats: ['Mayores de 16 años', 'Familias', 'Todos los niveles'],
-    note: '* Se recomienda no superar las 5 horas para llegar antes del cierre.',
+    subcats: ['Todos los niveles'],
+    note: 'Solo 40 cupos — experiencia íntima y exclusiva.',
   },
-}
-
-// ─── Route waypoints ──────────────────────────────────────────────────────────
-export const WAYPOINTS = {
-  gravel: [
-    { type: 'start', label: '🟢 Salida – Plaza Central, Sevilla', km: 'Km 0 · Alt. 1 600 m', desc: 'Salida masiva a las 6:30 am con neutralización por el casco urbano.' },
-    { type: 'feed',  label: 'Avituallamiento 1 – Vereda Los Pinos', km: 'Km 20 · Alt. 2 100 m', desc: 'Primer control. Agua, electrolitos, frutas y geles.' },
-    { type: 'climb', label: '⛰️ Alto del Zarzo – Punto Máximo', km: 'Km 38 · Alt. 3 050 m', desc: 'El punto más alto de la carrera. Vista panorámica de 360°. ¡Fotógrafo oficial aquí!' },
-    { type: 'feed',  label: 'Avituallamiento 2 – Finca La Esperanza', km: 'Km 52 · Alt. 1 850 m', desc: 'Descanso mayor. Comida caliente disponible. Asistencia mecánica.' },
-    { type: 'feed',  label: 'Avituallamiento 3 – Puente El Diablo', km: 'Km 68 · Alt. 1 200 m', desc: 'Tramo de descenso técnico previo. Zona de hidratación.' },
-    { type: 'feed',  label: 'Avituallamiento 4 – Quebrada Honda', km: 'Km 86 · Alt. 1 550 m', desc: 'Última subida importante. Agua y snacks para el sprint final.' },
-    { type: 'end',   label: '🏁 Meta – Parque El Zarzo', km: 'Km 100 · Alt. 1 630 m', desc: '¡Lo lograste! Recibe tu medalla finisher, cerveza artesanal y celebra.' },
-  ],
-  paseo: [
-    { type: 'start', label: '🟢 Salida – Plaza Central, Sevilla', km: 'Km 0 · Alt. 1 600 m', desc: 'Salida a las 8:00 am. Ambiente familiar y relajado.' },
-    { type: 'feed',  label: 'Avituallamiento 1 – Mirador del Valle', km: 'Km 15 · Alt. 1 900 m', desc: 'Vista espectacular. Agua, frutas y snacks.' },
-    { type: 'climb', label: '⛰️ Punto Más Alto – Loma Verde', km: 'Km 26 · Alt. 2 200 m', desc: 'El punto más elevado del paseo. ¡Fotógrafo oficial!' },
-    { type: 'feed',  label: 'Avituallamiento 2 – Finca La Esperanza', km: 'Km 38 · Alt. 1 750 m', desc: 'Descanso mayor. Comida disponible. Zona de juegos para niños.' },
-    { type: 'end',   label: '🏁 Meta – Parque El Zarzo', km: 'Km 50 · Alt. 1 630 m', desc: '¡Llegaste! Medalla finisher y acceso a la fiesta post-carrera.' },
-  ],
 }
 
 // ─── Schedule ─────────────────────────────────────────────────────────────────
 export const SCHEDULE = {
   sabado: [
-    { time: '10:00 am', title: 'Apertura de Registro y Entrega de Kits', desc: 'Centro Deportivo, Sevilla Valle. Presenta tu documento de identidad y recibe tu kit oficial. Horario hasta las 8:00 pm.', highlight: false },
-    { time: '3:00 pm',  title: 'Revisión Técnica de Bicicletas', desc: 'Técnicos verificarán frenos, neumáticos, transmisión y equipamiento de seguridad.', highlight: false },
-    { time: '4:00 pm',  title: 'Briefing Obligatorio – Gravel Race', desc: 'Reunión de participantes con los organizadores. Asistencia obligatoria. Escenario principal.', highlight: false },
-    { time: '5:00 pm',  title: 'Briefing – El Paseo', desc: 'Reunión informativa para participantes del Paseo. Carpa B.', highlight: false },
-    { time: '6:00 pm',  title: 'Pasta Party & Noche de Bienvenida', desc: 'Cena de carbohidratos para todos los inscritos. Música en vivo y charlas de ciclistas invitados.', highlight: false },
-    { time: '8:00 pm',  title: 'Cierre de Entrega de Kits', desc: 'Último horario de recogida. No habrá entrega el día de la carrera.', highlight: false },
+    { time: 'Mañana',   title: 'Registro y Kit', desc: 'Llegás a Sevilla y recogés tu kit en un punto central del pueblo. Mecánico disponible para ajustes de último minuto.', highlight: false },
+    { time: 'Tarde',    title: 'Feria y Mercado Campesino', desc: 'El parque principal se transforma. Productores locales con café de las veredas, panela, miel, frutas, conservas, quesos. La forma más directa de conocer el territorio antes de rodarlo.', highlight: false },
+    { time: 'Tarde',    title: 'La Doble al Manzanillo', desc: 'Tradición ciclista revivida. Un grupo seleccionado sale rumbo a la vereda de Manzanillo. En cada parada recibe una pieza de indumentaria campesina. Al regreso, brindis con aguardiente en el parque.', highlight: true },
+    { time: 'Noche',    title: 'Charla de Ruta', desc: 'Un caficultor o líder veredal presenta el territorio y cuenta la historia de cada camino por donde van a pasar al día siguiente.', highlight: false },
   ],
   domingo: [
-    { time: '4:30 am', title: 'Apertura zona de salida', desc: 'Acceso al corral de la Gravel Race. Último control de equipamiento.', highlight: false },
-    { time: '6:30 am', title: '🏁 Largada – Gravel Race 100km', desc: 'Salida oficial con neutralización por Sevilla Valle. ¡El momento que todos esperaban!', highlight: true },
-    { time: '8:00 am', title: '🌄 Largada – El Paseo 50km', desc: 'Salida festiva y relajada. ¡A disfrutar la montaña!', highlight: true },
-    { time: '11:00 am', title: 'Primeros Finishers Gravel Race', desc: 'Se esperan los primeros ciclistas de elite en meta. Zona de celebración activa.', highlight: false },
-    { time: '1:00 pm', title: 'Primeros Finishers Paseo', desc: 'Llegada estimada de los primeros participantes del Paseo a meta.', highlight: false },
-    { time: '2:30 pm', title: 'Almuerzo Comunitario', desc: 'Comida típica de la región para todos los participantes y acompañantes.', highlight: false },
-    { time: '4:00 pm', title: '🏆 Ceremonia de Premiación', desc: 'Reconocimiento a los primeros 3 puestos de cada categoría y subcategoría. Música en vivo.', highlight: true },
-    { time: '5:30 pm', title: 'Fiesta de Clausura', desc: 'Cerveza artesanal de cortesía, música y la mejor compañía.', highlight: false },
+    { time: '5:30 AM',  title: 'Desayuno Campesino', desc: 'Calentado, huevos, arepa, chocolate y fruta. Comida de verdad para lo que viene.', highlight: false },
+    { time: '6:30 AM',  title: 'Concentración', desc: 'La Trocha y La Visita juntos en el punto de salida.', highlight: false },
+    { time: '7:00 AM',  title: 'Salida Conjunta', desc: 'Los 280 participantes salen juntos. Primeros 10–15 km todos por el mismo camino, luego bifurcación.', highlight: true },
+    { time: '11:30–1 PM', title: 'Llegada La Visita', desc: 'Los participantes de La Visita van regresando después de recorrer los caminos más lindos del territorio.', highlight: false },
+    { time: 'Tarde',    title: 'Llegadas La Trocha', desc: 'Los corredores de La Trocha van llegando a lo largo de la tarde después de 7 a 10 horas de ruta.', highlight: false },
+    { time: 'Tarde',    title: 'La Fiesta del Zarzo', desc: 'Almuerzo valluno, premiación breve (3 categorías), música, cerveza e historias de ruta. Cada participante recibe su cuarto de libra de café.', highlight: true },
   ],
 }
 
-// ─── Prizes ───────────────────────────────────────────────────────────────────
-export const PODIUM = [
-  { pos: '🥇 1er Lugar', amount: '$1.500.000 COP', desc: '+ Trofeo personalizado\n+ Kit premium de patrocinadores\n+ Maillot de campeón', note: 'General Masculino & Femenino', tier: 'gold' },
-  { pos: '🥈 2do Lugar', amount: '$800.000 COP',   desc: '+ Trofeo personalizado\n+ Kit de patrocinadores', note: 'General Masculino & Femenino', tier: 'silver' },
-  { pos: '🥉 3er Lugar', amount: '$400.000 COP',   desc: '+ Trofeo personalizado\n+ Kit de patrocinadores', note: 'General Masculino & Femenino', tier: 'bronze' },
-]
-
-export const SPECIAL_PRIZES = [
-  { icon: '🏆', title: 'Rey/Reina de la Montaña', desc: 'Mejor tiempo en el segmento del Alto del Zarzo. Kit especial + $200.000 COP' },
-  { icon: '⚡', title: 'Sprint Intermedio', desc: 'Mayor velocidad en el sprint del Km 68. Voucher de tienda oficial.' },
-  { icon: '👴', title: 'Veterano Más Veloz', desc: 'Mayor de 55 años con mejor tiempo general. Trofeo especial + kit.' },
-  { icon: '🌟', title: 'Subcategorías Gravel', desc: 'Podio en Sub-23, Open, Master 35+, 45+ y 55+. Trofeo + kit.' },
-  { icon: '🤳', title: 'Mejor Foto del Evento', desc: 'Vota en Instagram con #CaidosDelZarzo2026. Premio: inscripción 2027 gratis.' },
-  { icon: '🏅', title: 'Medalla Finisher', desc: 'Todo participante que complete el recorrido recibe su medalla.' },
-]
-
-// ─── FAQ ──────────────────────────────────────────────────────────────────────
-export const FAQ_ITEMS = [
-  { q: '¿Qué tipo de bicicleta necesito?', a: 'Para la Gravel Race es imprescindible una bicicleta de Gravel o MTB con neumáticos de al menos 35mm y frenos de disco. Para El Paseo cualquier bicicleta de terreno mixto: MTB, gravel, híbrida o cicloturista.' },
-  { q: '¿Puedo inscribirme el mismo día del evento?', a: 'No. La inscripción cierra el 15 de septiembre de 2026. No habrá inscripciones el día del evento.' },
-  { q: '¿Hay política de reembolso?', a: 'Sí. Cancelaciones hasta el 5 de septiembre reciben el 80% del valor. Del 6 al 15 de septiembre se reembolsa el 50%. Después no hay reembolso, pero puedes ceder tu inscripción (costo administrativo $15.000 COP).' },
-  { q: '¿Incluye transporte o alojamiento?', a: 'La inscripción no incluye transporte ni alojamiento. Tenemos alianzas con hoteles locales en Sevilla con tarifas especiales. Escríbenos para el código de descuento.' },
-  { q: '¿Dónde dejo la bicicleta al terminar?', a: 'Habrá zona de parqueo de bicicletas vigilada y gratuita en meta desde las 4:30 am hasta las 7:00 pm.' },
-  { q: '¿Puedo llevar a mis hijos al evento?', a: '¡Claro! Los menores de 16 años no pueden participar en las categorías de carrera, pero hay zona de actividades recreativas para niños en el área de meta.' },
-  { q: '¿Se puede participar en grupo?', a: 'Cada persona debe inscribirse individualmente. Puedes usar el código de grupo para aparecer agrupados en los resultados y tener corral de salida cercano.' },
-  { q: '¿Qué pasa si el clima es muy malo?', a: 'La carrera se realiza con lluvia moderada. En caso de emergencia climática extrema se puede postergar. Los organizadores comunicarán cambios por correo y redes sociales con al menos 12 horas de anticipación.' },
-  { q: '¿Cómo sé mi número de participante?', a: 'Tu número se asignará al confirmar el pago. Lo recibirás por correo electrónico junto con la confirmación de inscripción.' },
-  { q: '¿Habrá servicio de mecánica en ruta?', a: 'Sí. Habrá equipos de apoyo mecánico en los puntos de avituallamiento y una motocicleta de soporte técnico que recorre el circuito periódicamente.' },
-]
-
-// ─── Route rules ──────────────────────────────────────────────────────────────
-export const ROUTE_RULES = [
-  { icon: '⛑️', text: 'Casco rígido **obligatorio** en todo momento.' },
-  { icon: '📱', text: 'Celular cargado al **100%** al inicio.' },
-  { icon: '🗑️', text: 'Cero basura en el campo. Lleva tus residuos.' },
-  { icon: '🔢', text: 'Número visible en manillar y espalda.' },
-  { icon: '🤝', text: 'Ayuda a otros ciclistas en apuros.' },
-  { icon: '🚫', text: 'Respetar los cierres de ruta. Sin atajos.' },
-]
-
-// ─── Modal content ────────────────────────────────────────────────────────────
+// ─── Modal content (used by Registration) ────────────────────────────────────
 export const MODAL_CONTENT = {
   terms: {
     title: 'Términos y Condiciones',
@@ -209,12 +123,20 @@ export const MODAL_CONTENT = {
     ],
   },
   reglamento: {
-    title: 'Reglamento de la Carrera',
+    title: 'Reglamento',
     sections: [
-      { heading: 'Equipamiento Obligatorio', body: '• Casco rígido homologado\n• Número visible en manillar y espalda\n• Celular con batería al 100%\n• Al menos 1 bidón o sistema de hidratación\n• Kit de reparación básico' },
-      { heading: 'Conducta en Ruta', body: '• Respetar señalizaciones y trazado oficial\n• Cero atajos no autorizados\n• Ceder paso a vehículos de emergencia\n• No arrojar basura\n• Ayudar en caso de accidente' },
-      { heading: 'Descalificación', body: 'Será descalificado quien: use atajos, reciba asistencia exterior no permitida, cause daño a otro participante, no respete al personal de seguridad.' },
-      { heading: 'Tiempo Límite (Gravel Race)', body: 'El tiempo máximo es de 8 horas desde la salida. Participantes fuera de tiempo serán retirados por el servicio de rescate.' },
+      { heading: 'Equipamiento Obligatorio', body: '• Casco rígido homologado\n• Celular con batería al 100%\n• Al menos 1 bidón o sistema de hidratación\n• Kit de reparación básico (cámara, bomba, desmontables)' },
+      { heading: 'Conducta en Ruta', body: '• Respetar señalizaciones y trazado oficial\n• Cero atajos no autorizados\n• No arrojar basura — si lo empacaste, te lo llevas\n• Ayudar en caso de accidente' },
+      { heading: 'Descalificación', body: 'Será descalificado quien use atajos, reciba asistencia exterior no permitida, o cause daño a otro participante.' },
     ],
   },
 }
+
+// ─── Kept for backward compat with Registration and other components ─────────
+export const FEATURES = []
+export const ABOUT_CARDS = []
+export const WAYPOINTS = { gravel: [], paseo: [] }
+export const ROUTE_RULES = []
+export const FAQ_ITEMS = []
+export const PODIUM = []
+export const SPECIAL_PRIZES = []
