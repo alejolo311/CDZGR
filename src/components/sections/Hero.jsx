@@ -6,6 +6,12 @@ const MUTED  = 'rgba(242,234,216,0.55)'
 const RED    = '#8B3A2A'
 const BG     = '#1A120B'
 
+const YT_SRC =
+  'https://www.youtube.com/embed/YB4uTprpz7g' +
+  '?autoplay=1&mute=1&loop=1&playlist=YB4uTprpz7g' +
+  '&controls=0&showinfo=0&rel=0&modestbranding=1' +
+  '&playsinline=1&iv_load_policy=3&disablekb=1'
+
 function Num({ value, label }) {
   return (
     <div className="flex flex-col items-center min-w-[44px]">
@@ -33,11 +39,43 @@ export default function Hero() {
       className="relative min-h-screen flex flex-col items-center justify-center overflow-hidden"
       style={{ background: BG }}
     >
-      {/* Subtle radial gradient for depth */}
+      {/* YouTube background */}
+      <div className="absolute inset-0 pointer-events-none" style={{ zIndex: 0 }}>
+        <div
+          style={{
+            position: 'absolute',
+            top: '50%', left: '50%',
+            width: '100vw',
+            height: '56.25vw',
+            minHeight: '100vh',
+            minWidth: '177.78vh',
+            transform: 'translate(-50%, -50%)',
+          }}
+        >
+          <iframe
+            src={YT_SRC}
+            title="Background video"
+            allow="autoplay; fullscreen"
+            style={{ width: '100%', height: '100%', border: 'none', display: 'block' }}
+          />
+        </div>
+      </div>
+
+      {/* Overlay 1: warm base darkening */}
+      <div
+        className="absolute inset-0 pointer-events-none"
+        style={{ zIndex: 1, background: 'rgba(8, 3, 0, 0.48)' }}
+      />
+
+      {/* Overlay 2: radial vignette */}
       <div
         className="absolute inset-0 pointer-events-none"
         style={{
-          background: 'radial-gradient(ellipse 80% 60% at 50% 40%, rgba(139,58,42,0.08) 0%, transparent 70%)',
+          zIndex: 2,
+          background: [
+            'radial-gradient(ellipse 90% 65% at 50% 42%, transparent 30%, rgba(6,2,0,.62) 100%)',
+            'linear-gradient(to bottom, rgba(6,2,0,.18) 0%, transparent 25%, transparent 55%, rgba(6,2,0,.72) 100%)',
+          ].join(', '),
         }}
       />
 

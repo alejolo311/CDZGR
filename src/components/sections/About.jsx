@@ -69,7 +69,7 @@ export default function About() {
           </div>
 
           <p className="mt-6">
-            <strong className="text-foreground">19 y 20 de septiembre de 2025.</strong>{' '}
+            <strong className="text-foreground">19 y 20 de septiembre de 2026.</strong>{' '}
             280 cupos. Dos modalidades. Un fin de semana completo en el que Sevilla abre sus caminos,
             sus fincas y su cultura para que los recorras en bicicleta.
           </p>
