@@ -4,26 +4,26 @@
 
 @layer base {
   :root {
-    --background:           36 32% 91%;   /* #f2e8d2 — parchment warm  */
-    --foreground:           22 50%  8%;   /* #170e05 — deep warm brown  */
-    --card:                 38 40% 96%;   /* #f9f3e8 — off-white warm   */
-    --card-foreground:      22 50%  8%;
-    --popover:              38 40% 96%;
-    --popover-foreground:   22 50%  8%;
-    --primary:              31 78% 44%;   /* #c47818 — amber ochre      */
-    --primary-foreground:   0   0% 100%;
-    --secondary:            36 20% 84%;
-    --secondary-foreground: 22 40% 18%;
-    --muted:                36 18% 83%;
-    --muted-foreground:     27 20% 42%;   /* #7a6545 — warm brown       */
-    --accent:               36 20% 84%;
-    --accent-foreground:    22 50%  8%;
+    --background:           38 30% 92%;   /* #F5EFE0 — warm cream          */
+    --foreground:           22 42% 12%;   /* #2C1E12 — deep coffee brown   */
+    --card:                 38 34% 97%;   /* #FAF7F0 — warm white          */
+    --card-foreground:      22 42% 12%;
+    --popover:              38 34% 97%;
+    --popover-foreground:   22 42% 12%;
+    --primary:               8 53% 35%;   /* #8B3A2A — coffee cherry red   */
+    --primary-foreground:    0  0% 100%;
+    --secondary:            38 22% 86%;
+    --secondary-foreground: 22 38% 18%;
+    --muted:                38 18% 85%;
+    --muted-foreground:     28 24% 34%;   /* #6B5744 — warm brown muted    */
+    --accent:              135 22% 29%;   /* #3A5A3C — cafetal green        */
+    --accent-foreground:     0  0% 100%;
     --destructive:           0 72% 50%;
     --destructive-foreground: 0 0% 100%;
-    --border:               35 26% 77%;   /* #d5c4a4 — warm beige       */
-    --input:                36 20% 84%;
-    --ring:                 31 78% 44%;
-    --radius:               0.125rem;     /* very sharp — print-like    */
+    --border:               35 22% 78%;   /* #D4C5A9 — warm beige          */
+    --input:                38 20% 86%;
+    --ring:                  8 53% 35%;
+    --radius:               0.25rem;
   }
 
   * {
@@ -33,31 +33,42 @@
     padding: 0;
   }
 
-  html { scroll-behavior: smooth; }
+  html {
+    scroll-behavior: smooth;
+  }
 
   body {
     @apply bg-background text-foreground;
-    font-family: 'Inter', sans-serif;
+    font-family: 'Inter', system-ui, sans-serif;
     overflow-x: hidden;
     -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
   }
 
-  ::-webkit-scrollbar       { width: 4px; }
-  ::-webkit-scrollbar-track { background: hsl(36 20% 86%); }
-  ::-webkit-scrollbar-thumb { background: hsl(var(--primary)); }
+  ::-webkit-scrollbar       { width: 5px; }
+  ::-webkit-scrollbar-track { background: hsl(38 22% 88%); }
+  ::-webkit-scrollbar-thumb { background: #8B3A2A; border-radius: 4px; }
 }
 
 @layer utilities {
-  .font-title { font-family: 'Bebas Neue', sans-serif; }
-
-  /* ─── Dark warm section ─────────────────────────────────────────────── */
-  .dark-section {
-    background: #1a1208;
-    color: #f0e8d8;
+  .font-display {
+    font-family: 'DM Serif Display', Georgia, serif;
   }
-  /* ─── Medium-dark warm section (a step lighter) ─────────────────────── */
+
+  /* back-compat alias for Registration component */
+  .font-title {
+    font-family: 'DM Serif Display', Georgia, serif;
+  }
+
+  /* ─── Dark warm section (hero, footer, dark panels) ─────────────────── */
+  .dark-section {
+    background: #1A120B;
+    color: #F2EAD8;
+  }
+
+  /* ─── Mid-dark warm section ─────────────────────────────────────────── */
   .mid-section {
-    background: #221609;
-    color: #f0e8d8;
+    background: #2C1E12;
+    color: #F2EAD8;
   }
 }

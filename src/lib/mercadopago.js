@@ -10,13 +10,13 @@
 const ACCESS_TOKEN = import.meta.env.VITE_MP_ACCESS_TOKEN
 
 const PRICES = {
-  gravel: 899000,
-  paseo:  600000,
+  gravel: 499000,
+  paseo:  399000,
 }
 
 const TITLES = {
-  gravel: 'Gravel Race – Caídos del Zarzo 2026',
-  paseo:  'El Paseo – Caídos del Zarzo 2026',
+  gravel: 'La Trocha – Caídos del Zarzo Gravel 2025',
+  paseo:  'La Visita – Caídos del Zarzo Gravel 2025',
 }
 
 export const GRUPO_DESCUENTO  = 0.10  // 10 % de descuento para grupos

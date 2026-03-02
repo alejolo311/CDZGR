@@ -11,7 +11,7 @@ import { CATEGORIES, MODAL_CONTENT } from '@/lib/constants'
 import { supabase }             from '@/lib/supabase'
 import { createMPPreference, createMPGroupPreference, MP_PRICES, GRUPO_DESCUENTO, GRUPO_MIN } from '@/lib/mercadopago'
 
-const A  = '#c47818'
+const A  = '#8B3A2A'
 const MP = '#009EE3'
 
 const IND_STEPS  = ['Categoría', 'Datos', 'Salud', 'Pago']

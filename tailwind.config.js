@@ -43,16 +43,28 @@ export default {
           DEFAULT:    'hsl(var(--card))',
           foreground: 'hsl(var(--card-foreground))',
         },
-        /* amber/ochre — the color of dirt roads and dried grass */
-        orange: { DEFAULT: '#c47818', dark: '#8f5510' },
-        /* slate blue — used for Paseo/secondary route */
-        emerald: { race: '#4a7aaa', 'race-dark': '#2e5a88' },
-        /* warm darks for hero/footer sections */
-        earth: { dark: '#1a1208', mid: '#221609', panel: '#2c1f0e' },
+        /* Coffee red — main accent */
+        coffee:  { DEFAULT: '#8B3A2A', dark: '#6E2D20', light: '#A84835' },
+        /* Cafetal green — secondary accent */
+        cafetal: { DEFAULT: '#3A5A3C', dark: '#2D4630', light: '#4A7A4D' },
+        /* Earth tones — warm dark palette */
+        earth: {
+          950: '#1A120B',
+          900: '#221609',
+          800: '#2C1E12',
+          700: '#4A3728',
+          600: '#6B5744',
+          500: '#8B7355',
+          400: '#A89279',
+          300: '#C4B49E',
+          200: '#D4C5A9',
+          100: '#E8DCC8',
+          50:  '#F5EFE0',
+        },
       },
       fontFamily: {
-        title: ['"Bebas Neue"', 'sans-serif'],
-        body:  ['Inter', 'sans-serif'],
+        display: ['"DM Serif Display"', 'Georgia', 'serif'],
+        body:    ['Inter', 'system-ui', 'sans-serif'],
       },
       borderRadius: {
         lg: 'var(--radius)',
@@ -69,36 +81,16 @@ export default {
           to:   { height: '0' },
         },
         fadeUp: {
-          from: { opacity: '0', transform: 'translateY(30px)' },
+          from: { opacity: '0', transform: 'translateY(24px)' },
           to:   { opacity: '1', transform: 'translateY(0)' },
         },
-        gridMove: {
-          '0%':   { backgroundPosition: '0 0' },
-          '100%': { backgroundPosition: '60px 60px' },
-        },
-        scrollPulse: {
-          '0%, 100%': { opacity: '1',  transform: 'scaleY(1)' },
-          '50%':      { opacity: '0.4', transform: 'scaleY(0.6)' },
-        },
         blink: { '50%': { opacity: '0' } },
-        bounceUp: {
-          '0%, 100%': { transform: 'translateY(0)' },
-          '50%':      { transform: 'translateY(-16px)' },
-        },
-        shimmer: {
-          '0%':   { backgroundPosition: '-200% center' },
-          '100%': { backgroundPosition: '200% center' },
-        },
       },
       animation: {
         'accordion-down': 'accordion-down 0.2s ease-out',
         'accordion-up':   'accordion-up 0.2s ease-out',
-        'fade-up':        'fadeUp 0.8s ease both',
-        'grid-move':      'gridMove 20s linear infinite',
-        'scroll-pulse':   'scrollPulse 2s infinite',
+        'fade-up':        'fadeUp 0.7s ease both',
         blink:            'blink 1s step-end infinite',
-        'bounce-up':      'bounceUp 1s ease',
-        shimmer:          'shimmer 2s linear infinite',
       },
     },
   },
